@@ -1,0 +1,40 @@
+
+.logout-button {
+  background-color: #2d2b2b;
+  color: #ffffff;
+  border: none;
+  padding: 10px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+
+
+.logout-button:hover {
+  background-color: #000000;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.back-button {
+  background-color: #2d2b2b;
+  color: #ffffff;
+  border: none;
+  padding: 10px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.back-button:hover {
+  background-color: #000000;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Center the buttons vertically within their container */
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}

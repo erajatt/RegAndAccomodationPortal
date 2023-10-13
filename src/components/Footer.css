@@ -1,0 +1,83 @@
+/* Footer.css */
+
+.custom-footer {
+  background-color: #272626;
+  padding: 20px 0;
+  position: inherit;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-width: 50vh;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0px 2vh;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: #eee; /* Lighter text color */
+}
+
+.logo-image {
+  height: 40px; /* Set the height of the logo image */
+  margin-right: 10px;
+}
+
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-link {
+  text-decoration: none;
+  margin-right: 20px;
+  color: #eee; /* Lighter link color */
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-link:hover {
+  color: #007bff; /* Link color on hover */
+}
+
+.footer-divider {
+  border-top: 1px solid #555; /* Darker divider line color */
+  margin: 20px 0;
+}
+
+.footer-copyright {
+  display: block;
+  font-size: 0.8rem;
+  color: #999; /* Text color */
+  text-align: center;
+  margin-top: 20px;
+}
+
+.copyight-link {
+  text-decoration: none;
+  color: #999; /* Link color */
+  transition: color 0.2s ease-in-out;
+}
+
+.copyight-link:hover {
+  color: #007bff; /* Link color on hover */
+}

@@ -1,0 +1,29 @@
+.verification-badge {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.verification-badge .icon {
+  font-size: 16px;
+}
+
+
+.tooltipx {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.verification-badge:hover .tooltipx {
+  opacity: 1;
+}

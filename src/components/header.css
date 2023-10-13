@@ -1,0 +1,27 @@
+/* Assuming you have a CSS file linked to your component */
+.header-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    background-color: black;
+  }
+  
+  .header {
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+    background-color: black;
+  }
+  
+  .header-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -500px; /* A large negative value to ensure it covers the entire left side */
+    width: 500px; /* Adjust this width to control when the black background appears */
+    background-color: black;
+  }
+  

@@ -1,0 +1,29 @@
+.App{
+  background: radial-gradient(#0c3e53, transparent);
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #408fe4;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin-right: 10px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.input:disabled{
+  cursor: not-allowed;
+}
+

@@ -1,0 +1,36 @@
+button:disabled{
+    opacity: 50%;
+    cursor: not-allowed;
+}
+
+.download-button {
+  padding: 6px 9px;
+  margin: 5px;
+  font-size: 13px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  background-color: #28a745;
+}
+
+.download-button:hover {
+  background-color: #218838;
+}
+
+.download1-button {
+  padding: 6px 9px;
+  margin: 5px;
+  font-size: 13px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  background-color: #2cd1c9;
+}
+
+.download1-button:hover {
+  background-color: #2b91a0;
+}

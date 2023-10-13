@@ -1,0 +1,29 @@
+/* Style for the component container */
+.container {
+  /* width: 300px; */
+  margin: 0 auto;
+  /* padding: 20px; */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style for the input field */
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Style for the dropdown options */
+datalist {
+  display: none;
+}
+
+/* Style for the warning message */
+.warning {
+  margin-top: 5px;
+  color: red;
+  font-size: 14px;
+}

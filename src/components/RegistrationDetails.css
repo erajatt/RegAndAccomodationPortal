@@ -1,0 +1,42 @@
+/* FeeBreakdown.css */
+.fee-breakdown {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+  /* border-collapse: collapse; */
+}
+
+.fee-details {
+  border-collapse: collapse;
+}
+
+.fee-details td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.fee-header {
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-icon {
+  font-size: 14px;
+  transition: transform 0.3s;
+}
+
+.dropdown-icon.open {
+  transform: rotate(180deg);
+}
+
+.fee-details td.right-align {
+  text-align: right;
+}
+
+.fee-details td.third-column {
+  width: 120px; /* Adjust the width as needed */
+}
