@@ -19,7 +19,7 @@ const Home = (props) => {
   const [emailID, setEmailID] = useState(null);
   const [isStudent, setIsStudent] = useState(false);
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
-  const [token, setToken]=useState(null);
+  const [token, setToken] = useState(null);
   const navigate = useNavigate();
 
   const setValues = async (token) => {
@@ -68,7 +68,7 @@ const Home = (props) => {
       const cookieValue = desiredCookie.split("=")[1];
       setCv(cookieValue);
       setValues(cookieValue);
-      setToken(cookieValue)
+      setToken(cookieValue);
     }
   }, []);
 
@@ -189,6 +189,13 @@ const Home = (props) => {
               Show Users
             </Link>
           )}
+
+          {isAdmin && (
+            <Link to="/accommodationWaitingList" className="button admin-button">
+              Show accommodation waiting list
+            </Link>
+          )}
+
           {formFilled && !isVerified && (
             <div>
               <h1 className="congrats">

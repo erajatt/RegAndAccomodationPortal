@@ -14,6 +14,7 @@ const Home = lazy(() => import("./pages/home"));
 const Accommodation = lazy(() => import("./pages/accommodation"));
 const Registration = lazy(() => import("./pages/registration"));
 const Users = lazy(() => import("./pages/users"));
+const AccommodationWaitingList = lazy(() => import("./pages/accommodationWaitingList"));
 
 
 function App() {
@@ -45,6 +46,7 @@ function AppContent() {
           <Route path="/home" element={user? <Home />: <Navigate to="/" />} />
           <Route path="/registration" element={user? <Registration />: <Navigate to="/" />} />
           <Route path="/accommodation" element={user? <Accommodation />: <Navigate to="/" />} />
+          <Route path="/accommodationWaitingList" element={user? <AccommodationWaitingList />: <Navigate to="/" />} />
           <Route path="/users" element={user? <Users />: <Navigate to="/" />} />
         </Routes>
       </Suspense>

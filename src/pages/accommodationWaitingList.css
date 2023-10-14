@@ -1,0 +1,139 @@
+.userscontainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #e5e5e5;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    justify-items: center;
+    align-items: center;
+    min-height: 100vh;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    margin: 20px;
+    /* min-height: 100vh; */
+    text-align: center;
+    overflow: overlay;
+    background-color: #e5e5e5;
+    border-radius: 25px;
+    box-shadow: 5px 6px 6px rgb(0 0 0 / 10%);
+  }
+  .table-container {
+    max-width: 100%;
+    max-height: 70vh;
+    overflow-y: scroll;
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: 5px 6px 6px rgb(0 0 0 / 10%);
+  }
+  
+  
+  .userscontainer h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #333;
+    align-self: center;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+  }
+  input:disabled{
+    cursor: not-allowed;
+  }
+  
+  th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  
+  .userscontainer button {
+    padding: 6px 9px;
+    background-color: #007bff;
+    font-size: 13px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .userscontainer button:hover {
+    background-color: #0056b3;
+  }
+  
+  .userscontainer .delete-button {
+    background-color: #dc3545;
+  }
+  
+  .userscontainer .delete-button:hover {
+    background-color: #c82333;
+  }
+  
+  .userscontainer .download-button {
+    background-color: #28a745;
+  }
+  
+  .userscontainer .download-button:hover {
+    background-color: #218838;
+  }
+  
+  .userscontainer .download1-button {
+    background-color: #2cd1c9;
+  }
+  
+  .userscontainer .download1-button:hover {
+    background-color: #2b91a0;
+  }
+  
+  .userscontainer .view-button {
+    background-color: #c7da33;
+  }
+  
+  .userscontainer .view-button:hover {
+    background-color: #a3bd0e;
+  }
+  
+  /* ... (existing CSS code) */
+  
+  .userscontainer .download-all-button {
+    margin:10px;
+    background-color: #17a2b8;
+  
+  }
+  
+  .userscontainer .download-all-button:hover {
+    background-color: #138496;
+  }
+  
+  .enabled-cursor {
+    cursor: pointer;
+  }
+  
+  button:disabled{
+    opacity: 50%;
+    cursor: not-allowed;
+  }
+  
+  /* .table-container{
+    margin: 10px;
+  } */
+  
+  .user-count {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  

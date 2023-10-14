@@ -11,7 +11,7 @@ const Users = () => {
   const [isAdmin, setAdmin] = useState(true);
   const [searchInput, setSearchInput] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [cookieValue, setCookieValue] = useState(""); // Add cookieValue state
+  const [cookieValue, setCookieValue] = useState("");
   const [loadingEx, setLoadingEx] = useState(false);
   const [loadingPf, setLoadingPf] = useState(false);
   const [loadingIf, setLoadingIf] = useState(false);
@@ -73,18 +73,8 @@ const Users = () => {
       }
     );
     setAdmin(response.data.isAdmin);
-    setCookieValue(token); // Update the cookieValue state
+    setCookieValue(token);
   };
-
-  // useEffect(() => {
-  //   if (cookieValue && users) {
-  //     setLoadingVisible(false);
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    filterUsers();
-  }, [filterUsers]);
 
   const handleDeleteUser = async (userID) => {
     const response = await axios.delete(
