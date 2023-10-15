@@ -48,7 +48,9 @@ const Auth = (props) => {
       >
         <p style={messageStyles}>Welcome to IHMTC 2023 Registrations!!!</p>
       </div>
-      <h1 style={{ fontWeight: "700" }}>IHMTC Registration Portal</h1>
+      <h1 style={{ fontWeight: "700", color: isDarkMode ? "white" : "black" }}>
+        IHMTC Registration Portal
+      </h1>
       <div className={`authCard${isDarkMode ? "-dark" : ""} scroll`}>
         <div className="authMode">
           <h3
@@ -308,7 +310,8 @@ const SignUpForm = (props) => {
     content = (
       <form onSubmit={handleSubmit(onSubmit)} className="authForm">
         <label htmlFor="useremail">Email ID:</label>
-        <input className={`${DarkMode ? "input-dark" : ""}`}
+        <input
+          className={`${DarkMode ? "input-dark" : ""}`}
           type="email"
           placeholder="Email"
           id="useremail"
@@ -353,7 +356,8 @@ const SignUpForm = (props) => {
             />
           )}
         </span>
-        <input className={`${DarkMode ? "input-dark" : ""}`}
+        <input
+          className={`${DarkMode ? "input-dark" : ""}`}
           type={show ? "text" : "password"}
           placeholder="Password"
           id="userpassword"
@@ -398,7 +402,8 @@ const SignUpForm = (props) => {
             />
           )}
         </span>
-        <input className={`${DarkMode ? "input-dark" : ""}`}
+        <input
+          className={`${DarkMode ? "input-dark" : ""}`}
           type={showc ? "text" : "password"}
           placeholder="Confirm Password"
           id="confirmPassword"
