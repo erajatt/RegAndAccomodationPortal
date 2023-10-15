@@ -20,23 +20,29 @@ const Users = (props) => {
   const DarkMode = props.DarkMode;
 
   const fetchUserData = async (token) => {
-    try {
-      // setLoadingVisible(true);
-      const response = await axios.post(
-        "https://regportal.onrender.com/admin/user-list",
-        { token }
-      );
-      if (response.data.success === "true") {
-        setUsers(response.data.list);
-      } else {
-        // console.log(response);
-      }
-    } catch (error) {
-      // console.log(error);
-      toast.error(error);
+    const response = await axios.post(
+      "https://regportal.onrender.com/admin/user-list",
+      { token }
+    );
+    if (response.data.success === "true") {
+      setUsers(response.data.list);
     }
-    // setLoadingVisible(false);
   };
+
+  useEffect(() => {
+    const cookie = document.cookie;
+    const cookieArray = cookie.split("; ");
+    const desiredCookie = cookieArray.find((item) =>
+      item.startsWith("access_token=")
+    );
+
+    if (desiredCookie) {
+      const cookieVal = desiredCookie.split("=")[1];
+      setValues(cookieVal);
+      fetchUserData(cookieVal);
+      setCookieValue(cookieVal);
+    }
+  }, []);
 
   const filterUsers = useCallback(() => {
     const filtered = users.filter((user) =>
@@ -72,20 +78,24 @@ const Users = (props) => {
       }
     );
     setAdmin(response.data.isAdmin);
-    setCookieValue(token);
   };
 
   const handleDeleteUser = async (userID) => {
-    const response = await axios.delete(
-      `https://regportal.onrender.com/admin/delete`,
-      {
-        data: { userID: userID, token: cookieValue },
+    try {
+      const response = await axios.delete(
+        `https://regportal.onrender.com/admin/delete`,
+        {
+          data: { userID: userID, token: cookieValue },
+        }
+      );
+      if (response.data.success === "true") {
+        toast.success("User deleted succesfully!");
+        setUsers(response.data.list);
+      } else {
+        toast.error("Failed to delete the user. Please try again.");
       }
-    );
-    // console.log(response);
-    toast.success(response.data.message);
-    if (response.data.success === "true") {
-      setUsers(response.data.list);
+    } catch (error) {
+      toast.error("Failed to delete the user. Please try again.");
     }
   };
 
@@ -101,12 +111,11 @@ const Users = (props) => {
           token: cookieValue,
         }
       );
-      // console.log(response);
-      fetchUserData(cookieValue);
-      // console.log(response.data);
+
       if (response.data.success !== "true") {
-        toast.error(response.data);
+        toast.error("Failed to verify the user.");
       } else if (response.data.isVerified === true) {
+        fetchUserData(cookieValue);
         try {
           const response = await axios.post(
             "https://regportal.onrender.com/admin/sendVerificationEmail",
@@ -115,13 +124,13 @@ const Users = (props) => {
               token: cookieValue,
             }
           );
-          // console.log(response);
           if (response.data.success === "true")
-            toast.success("Email has been sent successfully.");
-          else toast.error("Failed to send email to the user.");
+            toast.success(
+              "User is verified and email has been sent successfully."
+            );
+          else toast.error("Failed to send verification email to the user.");
         } catch (error) {
-          console.error("Error sending email:", error);
-          toast.error("Failed to send email to the user.");
+          toast.error("Failed to send verification email to the user.");
         }
       }
     }
@@ -132,35 +141,27 @@ const Users = (props) => {
       "Do you want to verify the user's accommodation and send an email to the user?"
     );
     if (confirmed) {
-      const response = await axios.post(
-        "https://regportal.onrender.com/admin/changeVerified",
-        {
-          userID: userID,
-          token: cookieValue,
-        }
-      );
-      // console.log(response);
-      fetchUserData(cookieValue);
-      // console.log(response.data);
-      if (response.data.success !== "true") {
-        toast.error(response.data);
-      } else if (response.data.isAccommodationVerified === true) {
-        try {
-          const response = await axios.post(
-            "https://regportal.onrender.com/admin/sendVerificationEmail",
-            {
-              userID: userID,
-              token: cookieValue,
-            }
+      try {
+        const response = await axios.put(
+          "https://regportal.onrender.com/accommodation/verification",
+          {
+            userID: userID,
+            token: cookieValue,
+          }
+        );
+        if (response.data.success === "true") {
+          fetchUserData(cookieValue);
+          toast.success(
+            "User accommodation has been verified and email has been sent successfully."
           );
-          // console.log(response);
-          if (response.data.success === "true")
-            toast.success("Email has been sent successfully.");
-          else toast.error("Failed to send email to the user.");
-        } catch (error) {
-          console.error("Error sending email:", error);
-          toast.error("Failed to send email to the user.");
-        }
+        } else
+          toast.error(
+            "Failed to verify the user's accommodation. Please try again."
+          );
+      } catch (error) {
+        toast.error(
+          "Failed to verify the user's accommodation. Please try again."
+        );
       }
     }
   };
@@ -172,7 +173,6 @@ const Users = (props) => {
         "https://regportal.onrender.com/admin/download",
         { token: cookieValue }
       );
-      // console.log(response);
 
       let allUsersData = response.data.usersData;
       allUsersData.map((data) => {
@@ -190,7 +190,6 @@ const Users = (props) => {
       });
       saveAs(blob, "all_users_data.xlsx");
     } catch (error) {
-      // console.log(error);
       toast.error(error);
     } finally {
       setLoadingEx(false);
@@ -201,20 +200,16 @@ const Users = (props) => {
     axios({
       url: `https://regportal.onrender.com/admin/userIshmtIDFile`,
       method: "POST",
-      responseType: "blob", // Set the response type to blob for binary data
+      responseType: "blob",
       data: { userID: userID, token: cookieValue },
     })
       .then((response) => {
         handleLoadingStateChange(userID, "downloadISHMTID", true);
-        // Create a URL for the blob data
         if (response.data.success === "false")
           toast.warn(response.data.message);
         const blobUrl = URL.createObjectURL(response.data);
 
-        // Create a link element for downloading
-        const success = response.data.success;
-        // console.log(success);
-        if (success === "false") {
+        if (response.data.success === "false") {
           toast.warn(response.data.message);
         } else {
           const link = document.createElement("a");
@@ -222,12 +217,10 @@ const Users = (props) => {
           link.download = response.headers["content-disposition"].split("=")[1];
           link.target = "_blank";
 
-          // Trigger a click on the link to start the download
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
 
-          // Revoke the blob URL to release memory
           URL.revokeObjectURL(blobUrl);
         }
       })
@@ -244,15 +237,12 @@ const Users = (props) => {
     axios({
       url: `https://regportal.onrender.com/admin/userPaymentFile`,
       method: "POST",
-      responseType: "blob", // Set the response type to blob for binary data
+      responseType: "blob",
       data: { userID: userID, token: cookieValue },
     })
       .then((response) => {
-        // Create a URL for the blob data
         handleLoadingStateChange(userID, "downloadPaymentReciept", true);
         const blobUrl = URL.createObjectURL(response.data);
-        // console.log(response.headers);
-        // Create a link element for downloading
         const success = response.data.success;
         if (success === "false") {
           toast.warn(response.data.message);
@@ -262,12 +252,10 @@ const Users = (props) => {
           link.download = response.headers["content-disposition"].split("=")[1];
           link.target = "_blank";
 
-          // Trigger a click on the link to start the download
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
 
-          // Revoke the blob URL to release memory
           URL.revokeObjectURL(blobUrl);
         }
       })
@@ -284,11 +272,10 @@ const Users = (props) => {
     axios({
       url: `https://regportal.onrender.com/admin/userFormDetail`,
       method: "POST",
-      responseType: "json", // Set the response type to JSON
+      responseType: "json",
       data: { userID: userID, token: cookieValue },
     })
       .then((response) => {
-        // Extract the formData attribute from the JSON response
         setLoading(true);
         const formData = response.data.formData;
 
@@ -296,11 +283,8 @@ const Users = (props) => {
         if (success === "false") {
           toast.warn(response.data.message);
         } else {
-          // Create a container div for the customized content
           const container = document.createElement("div");
           container.className = "container";
-
-          // Create the customized HTML content
           container.innerHTML = `
           <style>
           body {
@@ -392,8 +376,6 @@ const Users = (props) => {
   <p>For inquiries, contact us at <a className="link" href="mailto:ihmtc2023@gmail.com">ihmtc2023@gmail.com</a></p>
   <p className="verification-msg">We are currently verifying your registration details. You will be notified once your submitted data is verified.</p>
 </div>`;
-
-          // Open the customized content in a new tab
           const newTab = window.open("", "_blank");
           if (newTab) {
             newTab.document.body.appendChild(container);
@@ -418,22 +400,15 @@ const Users = (props) => {
       data: { token: cookieValue },
     })
       .then((response) => {
-        // Create a URL for the blob data
         setLoadingIf(true);
         const blobUrl = URL.createObjectURL(response.data);
-        // console.log(response.headers);
-        // Create a link element for downloading
         const link = document.createElement("a");
         link.href = blobUrl;
         link.download = response.headers["content-disposition"].split("=")[1];
         link.target = "_blank";
-
-        // Trigger a click on the link to start the download
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
-        // Revoke the blob URL to release memory
         URL.revokeObjectURL(blobUrl);
       })
       .catch((error) => {
@@ -446,26 +421,21 @@ const Users = (props) => {
     axios({
       url: `https://regportal.onrender.com/admin/PaymentFiles`,
       method: "POST",
-      responseType: "blob", // Set the response type to blob for binary data
+      responseType: "blob",
       data: { token: cookieValue },
     })
       .then((response) => {
-        // Create a URL for the blob data
         setLoadingPf(true);
         const blobUrl = URL.createObjectURL(response.data);
-        // console.log(response.headers);
-        // Create a link element for downloading
         const link = document.createElement("a");
         link.href = blobUrl;
         link.download = response.headers["content-disposition"].split("=")[1];
         link.target = "_blank";
 
-        // Trigger a click on the link to start the download
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
 
-        // Revoke the blob URL to release memory
         URL.revokeObjectURL(blobUrl);
       })
       .catch((error) => {
@@ -592,17 +562,17 @@ const Users = (props) => {
                   </td>
                   <td>{user.userEmail}</td>
                   <td>
-                    {user.isAccommodationFormFilled ? (
+                    {user.accommodationFormFilled ? (
                       <input
                         type="checkbox"
-                        checked={user.isAccommodationVerified}
+                        checked={user.accommodationVerified}
                         onClick={() => {
                           handleVerifyUserAccommodation(user._id);
                         }}
                         className={
-                          user.isAccommodationVerified ? "" : "enabled-cursor"
+                          user.accommodationVerified ? "" : "enabled-cursor"
                         }
-                        disabled={user.isAccommodationVerified}
+                        disabled={user.accommodationVerified}
                       />
                     ) : null}
                   </td>

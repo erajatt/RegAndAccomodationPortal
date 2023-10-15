@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "./accommodation.css"; // Import the CSS file
+import "./accommodation.css";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Loading from "../components/Loading";
 import { toast } from "react-toastify";
 import useWindowSize from "react-use/lib/useWindowSize";
-import Confetti, { ReactConfetti } from "react-confetti";
+import Confetti from "react-confetti";
 
 const Accommodation = (props) => {
   const { width, height } = useWindowSize();
@@ -24,62 +24,49 @@ const Accommodation = (props) => {
     token: "",
   });
 
-  const setValues = async (token) => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "https://regportal.onrender.com/accommodation/access",
-        { token }
-      );
-      if (response.data) {
-        setAccompanyingPersons(response.data.accompanyingPersons);
-      }
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      setLoading(false);
-      // handleDownloadUserData(cv);
-    }
-  };
-
+  const navigate = useNavigate();
   useEffect(() => {
-    const cookie = document.cookie;
-    const cookieArray = cookie.split("; ");
-    const desiredCookie = cookieArray.find((item) =>
-      item.startsWith("access_token=")
-    );
-    if (desiredCookie) {
-      const cookieValue = desiredCookie.split("=")[1];
-      setValues(cookieValue);
-      formData.token = cookieValue;
-    }
+    const setValues = async (token) => {
+      setLoading(true);
+      try {
+        const response = await axios.post(
+          "https://regportal.onrender.com/accommodation/access",
+          { token }
+        );
+        if (response.data) {
+          setAccompanyingPersons(response.data.accompanyingPersons);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const initializeFormData = () => {
+      const cookie = document.cookie;
+      const cookieArray = cookie.split("; ");
+      const desiredCookie = cookieArray.find((item) =>
+        item.startsWith("access_token=")
+      );
+      if (desiredCookie) {
+        const cookieValue = desiredCookie.split("=")[1];
+        setValues(cookieValue);
+        setFormData({ ...formData, token: cookieValue });
+      }
+    };
+
+    initializeFormData();
   }, []);
 
-  const Buttons = () => {
-    const navigate = useNavigate();
+  const handleLogout = () => {
+    window.localStorage.clear();
+    navigate("/");
+    toast.success("Logged out successfully");
+  };
 
-    const handleLogout = () => {
-      window.localStorage.clear();
-      navigate("/");
-      toast.success("Logged out successfully");
-    };
-
-    const handleGoBack = () => {
-      navigate(-1);
-    };
-
-    return (
-      <div className="buttons-container">
-        {!accommodationSuccess && (
-          <button className="back-button" onClick={handleGoBack}>
-            Back
-          </button>
-        )}
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
-    );
+  const handleGoBack = () => {
+    navigate(-1);
   };
 
   const handleChange = (e) => {
@@ -92,15 +79,27 @@ const Accommodation = (props) => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    setFormData((prevData) => ({
-      ...prevData,
-      accommodationPaymentReceipt: file,
-    }));
+    setFormData({ ...formData, accommodationPaymentReceipt: file });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStep(2);
+  };
+
+  const calculatePaymentAmount = (accommodationType) => {
+    switch (accommodationType) {
+      case "SHSPSO":
+        return 2600;
+      case "SHSPDO":
+        return 2000;
+      case "SHDPDO":
+        return 4000;
+      case "SHTPSDO":
+        return 6600;
+      default:
+        return 0;
+    }
   };
 
   const handleSubmit2 = async (e) => {
@@ -130,25 +129,35 @@ const Accommodation = (props) => {
     }
   };
 
-  function calculatePaymentAmount(accommodationType) {
-    switch (accommodationType) {
-      case "SHSPSO":
-        return 2600;
-      case "SHSPDO":
-        return 2000;
-      case "SHDPDO":
-        return 4000;
-      case "SHTPSDO":
-        return 6600;
-      default:
-        return 0;
-    }
-  }
+  const Buttons = () => {
+    const navigate = useNavigate();
 
-  const DarkMode = props.DarkMode;
+    const handleLogout = () => {
+      window.localStorage.clear();
+      navigate("/");
+      toast.success("Logged out successfully");
+    };
+
+    const handleGoBack = () => {
+      navigate(-1);
+    };
+
+    return (
+      <div className="buttons-container">
+        {!accommodationSuccess && (
+          <button className="back-button" onClick={handleGoBack}>
+            Back
+          </button>
+        )}
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+    );
+  };
 
   return (
-    <>
+    <div>
       {step === 1 && <Buttons />}
       {loading ? (
         <Loading />
@@ -158,8 +167,8 @@ const Accommodation = (props) => {
           style={{ marginBottom: "20px", opacity: 1 }}
         >
           {step === 1 && (
-            <div className={`registrationContainer${DarkMode ? "-dark" : ""}`}>
-              <h1 style={DarkMode ? { color: "white" } : {}}>Accommodation</h1>
+            <div className="registrationContainer">
+              <h1>Accommodation</h1>
               <p style={{ color: "red", textAlign: "right" }}>
                 * -&gt; required fields
               </p>
@@ -173,11 +182,6 @@ const Accommodation = (props) => {
                     name="accommodationType"
                     value={formData.accommodationType}
                     onChange={handleChange}
-                    style={
-                      DarkMode
-                        ? { backgroundColor: "#555", color: "white" }
-                        : {}
-                    }
                     required
                   >
                     <option value="">Select</option>
@@ -213,11 +217,6 @@ const Accommodation = (props) => {
                     name="arrivalTime"
                     value={formData.arrivalTime}
                     onChange={handleChange}
-                    style={
-                      DarkMode
-                        ? { backgroundColor: "#555", color: "white" }
-                        : {}
-                    }
                     required
                   >
                     <option value="">Select</option>
@@ -238,11 +237,6 @@ const Accommodation = (props) => {
                     name="departureTime"
                     value={formData.departureTime}
                     onChange={handleChange}
-                    style={
-                      DarkMode
-                        ? { backgroundColor: "#555", color: "white" }
-                        : {}
-                    }
                     required
                   >
                     <option value="">Select</option>
@@ -262,7 +256,7 @@ const Accommodation = (props) => {
           )}
           {step === 2 && (
             <div
-              className={`registrationContainer${DarkMode ? "-dark" : ""}`}
+              className="registrationContainer"
               style={{ marginBottom: "20px" }}
             >
               {!accommodationSuccess && (
@@ -341,7 +335,6 @@ const Accommodation = (props) => {
                       <span className="disclaimer">(Format: DUF5316282)</span>
                     </label>
                     <input
-                    className={`${DarkMode ? "input-dark" : ""}`}
                       type="text"
                       id="accommodationPaymentReferenceNumber"
                       name="accommodationPaymentReferenceNumber"
@@ -352,65 +345,64 @@ const Accommodation = (props) => {
                   </div>
                 )}
 
-                {!accommodationSuccess && (
-                  <div className="form-group">
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={isDeclarationChecked}
-                        required
-                        onChange={() =>
-                          setIsDeclarationChecked(!isDeclarationChecked)
-                        }
-                      />
-                      I declare that the information I have provided is correct.
-                    </label>
-                    <br />
-                    <br />
+            {!accommodationSuccess && (
+              <div className="form-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={isDeclarationChecked}
+                    required
+                    onChange={() =>
+                      setIsDeclarationChecked(!isDeclarationChecked)
+                    }
+                  />
+                  I declare that the information I have provided is correct.
+                </label>
+                <br />
+                <br />
 
-                    <button
-                      type="submit"
-                      className={`submit-button ${
-                        !isDeclarationChecked && "disabled"
-                      }`}
-                      disabled={!isDeclarationChecked}
-                      onClick={(event) => {
-                        const confirmation = window.confirm(
-                          "Are you sure you want to submit the form? This action can't be undone."
-                        );
-                        if (!confirmation) {
-                          event.preventDefault();
-                        }
-                      }}
-                    >
-                      Submit
-                    </button>
-                  </div>
-                )}
+                <button
+                  type="submit"
+                  className={`submit-button ${
+                    !isDeclarationChecked && "disabled"
+                  }`}
+                  disabled={!isDeclarationChecked}
+                  onClick={(event) => {
+                    const confirmation = window.confirm(
+                      "Are you sure you want to submit the form? This action can't be undone."
+                    );
+                    if (!confirmation) {
+                      event.preventDefault();
+                    }
+                  }}
+                >
+                  Submit
+                </button>
+              </div>
+            )}
 
-                {accommodationSuccess && (
-                  <div className="success-message">
-                    <p className="success-text">
-                      Accommodation successful! You can now{" "}
-                      <Link to="/home" className="return-link">
-                        return to the homepage
-                      </Link>
-                      .
-                    </p>
-                  </div>
-                )}
-              </form>
-            </div>
-          )}
-          {accommodationSuccess && (
-            <div className="conf" style={{ top: 0, position: "fixed" }}>
-              <Confetti width={width} height={height} />
-            </div>
-          )}
+            {accommodationSuccess && (
+              <div className="success-message">
+                <p className="success-text">
+                  Accommodation successful! You can now{" "}
+                  <Link to="/home" className="return-link">
+                    return to the homepage
+                  </Link>
+                  .
+                </p>
+              </div>
+            )}
+          </form>
         </div>
       )}
-    </>
-  );
-};
+      {accommodationSuccess && (
+        <div className="conf" style={{ top: 0, position: "fixed" }}>
+          <Confetti width={width} height={height} />
+        </div>
+      )}
+    </div>
+  )}
+  </div>
+)};
 
 export default Accommodation;

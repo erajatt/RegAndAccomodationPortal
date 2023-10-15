@@ -13,6 +13,8 @@ const Home = (props) => {
   const [isAdmin, setAdmin] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [formFilled, setFormFilled] = useState(false);
+  const [accommodationVerified, setAccommodationVerified] = useState(false);
+  const [accommodationFormFilled, setAccommodationFormFilled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData1, setFormData1] = useState({});
   const [cv, setCv] = useState(0);
@@ -35,10 +37,10 @@ const Home = (props) => {
         setEmailID(response.data.userEmail);
         setIsVerified(response.data.isVerified);
         setFormFilled(response.data.formFilled);
-        // handleDownloadUserData(cv);
+        setAccommodationFormFilled(response.data.accommodationFormFilled);
+        setAccommodationVerified(response.data.accommodationVerified);
       }
     } catch (error) {
-      // console.log(error);
       toast.error(error);
     }
 
@@ -242,7 +244,7 @@ const Home = (props) => {
             </>
           )}
 
-          {formFilled && !isVerified && (
+          {/* {formFilled && !isVerified && (
             <div className="last">
               <h3
                 className="verification-msg"
@@ -252,17 +254,31 @@ const Home = (props) => {
                 be notified once your submitted data is verified.{" "}
               </h3>
             </div>
-          )}
+          )} */}
           <div>
-            <Link
-              onClick={(e) => {
-                handleAccommodationButtonClick(e);
-              }}
-              className="button"
-              style={{ backgroundColor: "orange" }}
-            >
-              Book Your Accommodation <br />
-            </Link>
+            {!accommodationFormFilled && (
+              <Link
+                onClick={(e) => {
+                  handleAccommodationButtonClick(e);
+                }}
+                className="button"
+                style={{ backgroundColor: "orange" }}
+              >
+                Book Your Accommodation <br />
+              </Link>
+            )}
+            {accommodationFormFilled && !accommodationVerified && (
+              <p>
+                <strong>Thank you for filling the accommodation form. <br/> Your accommodation
+                details are currently under verification.<br/> You will receive an
+                email when your details are verified.<br/><br/></strong>
+              </p>
+            )}
+            {accommodationVerified && (
+              <p>
+                Congratulations! Your accommodation details have been verified.
+              </p>
+            )}
             {showAccommodationModal && (
               <div
                 className="modal"
@@ -316,6 +332,7 @@ const Home = (props) => {
               >
                 ihmtc2023@gmail.com
               </a>
+              <br/><br/>
             </p>
           </div>
         </div>

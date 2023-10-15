@@ -36,7 +36,6 @@ const Auth = (props) => {
     fontWeight: "700",
     padding: "20px",
     textAlign: "center",
-    // border: "2px solid #ffffff",
     borderRadius: "10px",
     margin: "20px auto",
   };
