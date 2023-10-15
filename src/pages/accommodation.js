@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti, { ReactConfetti } from "react-confetti";
 
-const Accommodation = () => {
+const Accommodation = (props) => {
   const { width, height } = useWindowSize();
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
@@ -110,7 +110,7 @@ const Accommodation = () => {
       setLoading(true);
       const response = await axios.post(
         "https://regportal.onrender.com/accommodation/submit",
-        formData ,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -145,6 +145,8 @@ const Accommodation = () => {
     }
   }
 
+  const DarkMode = props.DarkMode;
+
   return (
     <>
       {step === 1 && <Buttons />}
@@ -156,8 +158,8 @@ const Accommodation = () => {
           style={{ marginBottom: "20px", opacity: 1 }}
         >
           {step === 1 && (
-            <div className="registrationContainer">
-              <h1>Accommodation</h1>
+            <div className={`registrationContainer${DarkMode ? "-dark" : ""}`}>
+              <h1 style={DarkMode ? { color: "white" } : {}}>Accommodation</h1>
               <p style={{ color: "red", textAlign: "right" }}>
                 * -&gt; required fields
               </p>
@@ -171,6 +173,11 @@ const Accommodation = () => {
                     name="accommodationType"
                     value={formData.accommodationType}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -206,6 +213,11 @@ const Accommodation = () => {
                     name="arrivalTime"
                     value={formData.arrivalTime}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -226,6 +238,11 @@ const Accommodation = () => {
                     name="departureTime"
                     value={formData.departureTime}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -245,7 +262,7 @@ const Accommodation = () => {
           )}
           {step === 2 && (
             <div
-              className="registrationContainer"
+              className={`registrationContainer${DarkMode ? "-dark" : ""}`}
               style={{ marginBottom: "20px" }}
             >
               {!accommodationSuccess && (
@@ -324,6 +341,7 @@ const Accommodation = () => {
                       <span className="disclaimer">(Format: DUF5316282)</span>
                     </label>
                     <input
+                    className={`${DarkMode ? "input-dark" : ""}`}
                       type="text"
                       id="accommodationPaymentReferenceNumber"
                       name="accommodationPaymentReferenceNumber"

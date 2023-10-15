@@ -4,7 +4,7 @@ import "./RegistrationDetails.css";
 import VerificationBadge from "./verificationBadge.js";
 import "./RegistrationDetailsVerif.css";
 
-const RegistrationDetailsVerif = ({ formData, isVerified }) => {
+const RegistrationDetailsVerif = ({ formData, isVerified, DarkMode }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -30,15 +30,22 @@ const RegistrationDetailsVerif = ({ formData, isVerified }) => {
     return timeSince(d2);
   };
   return (
-    <div className="fee-breakdown table">
-      <div className="fee-header" onClick={toggleDropdown}>
+    <div
+      style={DarkMode ? { color: "white", backgroundColor: "#555" } : {}}
+      className={`fee-breakdown${DarkMode ? "-dark" : ""} table`}
+    >
+      <div
+        className="fee-header"
+        style={DarkMode ? { color: "white", backgroundColor: "#555" } : {}}
+        onClick={toggleDropdown}
+      >
         Registration Details{" "}
         <span className={`dropdown-icon ${isDropdownOpen ? "open" : ""}`}>
           ▼
         </span>
       </div>
       {isDropdownOpen && (
-        <table className="fee-details">
+        <table className={`fee-details${DarkMode ? "-dark" : ""}`}>
           {formData.firstName && (
             <tr>
               <td>First Name:</td> <td>{formData.firstName}</td>
@@ -140,12 +147,20 @@ const RegistrationDetailsVerif = ({ formData, isVerified }) => {
           )}
           {formData.ishmtIDFile && (
             <tr>
-              <td>ISHMT ID File:</td> <td>Attached on Portal<VerificationBadge isVerified={isVerified}/></td>
+              <td>ISHMT ID File:</td>{" "}
+              <td>
+                Attached on Portal
+                <VerificationBadge isVerified={isVerified} />
+              </td>
             </tr>
           )}
           {formData.ishmtIDno && (
             <tr>
-              <td>ISHMT ID no:</td> <td>{formData.ishmtIDno}<VerificationBadge isVerified={isVerified}/></td>
+              <td>ISHMT ID no:</td>{" "}
+              <td>
+                {formData.ishmtIDno}
+                <VerificationBadge isVerified={isVerified} />
+              </td>
             </tr>
           )}
           {formData.category && (
@@ -155,25 +170,34 @@ const RegistrationDetailsVerif = ({ formData, isVerified }) => {
           )}
           {formData.fee && (
             <tr>
-              <td>Fee Paid:</td> <td>₹ {Math.ceil(formData.fee).toFixed(2)}<VerificationBadge isVerified={isVerified}/></td>
+              <td>Fee Paid:</td>{" "}
+              <td>
+                ₹ {Math.ceil(formData.fee).toFixed(2)}
+                <VerificationBadge isVerified={isVerified} />
+              </td>
             </tr>
           )}
           {formData.paymentReferenceNumber && (
             <tr>
-                <td>Payment Reference Number</td><td>{formData.paymentReferenceNumber}<VerificationBadge isVerified={isVerified}/></td>
+              <td>Payment Reference Number</td>
+              <td>
+                {formData.paymentReferenceNumber}
+                <VerificationBadge isVerified={isVerified} />
+              </td>
             </tr>
           )}
           {formData.comment && (
             <tr>
-                <td>Comment</td><td>{formData.comment}</td>
+              <td>Comment</td>
+              <td>{formData.comment}</td>
             </tr>
           )}
           {formData.date && (
             <tr>
-                <td>Form Filled</td><td>{timeDiff(formData.date)}</td>
+              <td>Form Filled</td>
+              <td>{timeDiff(formData.date)}</td>
             </tr>
           )}
-          
         </table>
       )}
     </div>

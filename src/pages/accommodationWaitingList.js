@@ -4,7 +4,7 @@ import Loading from "../components/Loading";
 import { toast } from "react-toastify";
 import "./accommodationWaitingList.css";
 
-const AccommodationWaitingList = () => {
+const AccommodationWaitingList = (props) => {
   const [users, setUsers] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -12,7 +12,7 @@ const AccommodationWaitingList = () => {
   const [cookieValue, setCookieValue] = useState("");
   const [isAdmin, setAdmin] = useState(true);
   const [loading, setLoading] = useState(false);
-
+  const DarkMode = props.DarkMode;
   const setValues = async (token) => {
     const response = await axios.post(
       "https://regportal.onrender.com/auth/userAccess",
@@ -66,7 +66,6 @@ const AccommodationWaitingList = () => {
     }
   }, []);
 
-
   const handleAccommodationTypeChange = async (userId, newValue) => {
     const confirmed = window.confirm(
       "Are you sure, yoh want to give the selected accommodation option to the user? Please note that this action can't be undone."
@@ -107,6 +106,15 @@ const AccommodationWaitingList = () => {
         onChange={(e) =>
           handleAccommodationTypeChange(user._id, e.target.value)
         }
+        style={
+          DarkMode
+            ? {
+                backgroundColor: "#555",
+                color: "white",
+                border: "1px solid white",
+              }
+            : {}
+        }
         disabled={user.accommodationType ? true : false}
       >
         <option value="option1">Option 1</option>
@@ -118,9 +126,11 @@ const AccommodationWaitingList = () => {
 
   return (
     isAdmin && (
-      <div className="userscontainer">
+      <div className={`userscontainer${DarkMode ? "-dark" : ""}`}>
         <h2>Accommodation Waiting List</h2>
-        <div className="user-count">Total waiting users: {userCount}</div>
+        <div className={`user-count${DarkMode ? "-dark" : ""}`}>
+          Total waiting users: {userCount}
+        </div>
         <input
           type="text"
           placeholder="Search by Email"
@@ -128,7 +138,7 @@ const AccommodationWaitingList = () => {
           onChange={(e) => setSearchInput(e.target.value)}
         />
 
-        <div className="table-container">
+        <div className={`table-container${DarkMode ? "-dark" : ""}`}>
           <table>
             <thead>
               <tr>

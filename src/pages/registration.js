@@ -455,9 +455,9 @@ const updatedCountryCodes = countryCodes.map((country) => ({
   name: country.name,
 }));
 
-const Registration = () => {
+const Registration = (props) => {
   const { width, height } = useWindowSize();
-
+  const DarkMode = props.DarkMode;
   const [step, setStep] = useState(1);
   const [res, setRes] = useState({ category: "abc", fee: "INR 0" });
   const [isOptionSelected, setIsOptionSelected] = useState(false);
@@ -750,7 +750,7 @@ const Registration = () => {
           style={{ marginBottom: "20px", opacity: loadingf ? 0.5 : 1 }}
         >
           {step === 1 && (
-            <div className="registrationContainer">
+            <div className={`registrationContainer${DarkMode ? "-dark" : ""}`}>
               <h1>Conference Registration</h1>
               <p style={{ color: "red", textAlign: "right" }}>
                 * -&gt; required fields
@@ -762,6 +762,7 @@ const Registration = () => {
                     the conference badge.{" "}
                   </label>
                   <input
+                    className={`${DarkMode ? "input-dark" : ""}`}
                     type="text"
                     id="firstName"
                     name="firstName"
@@ -777,6 +778,7 @@ const Registration = () => {
                     the conference badge or leave blank.
                   </label>
                   <input
+                    className={`${DarkMode ? "input-dark" : ""}`}
                     type="text"
                     id="middleName"
                     name="middleName"
@@ -792,6 +794,7 @@ const Registration = () => {
                     then fill your first name again in this field.{" "}
                   </label>
                   <input
+                    className={`${DarkMode ? "input-dark" : ""}`}
                     type="text"
                     id="lastName"
                     name="lastName"
@@ -812,6 +815,11 @@ const Registration = () => {
                     name="honorific"
                     value={formData.honorific}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -830,6 +838,11 @@ const Registration = () => {
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -847,6 +860,11 @@ const Registration = () => {
                     name="birthYear"
                     value={formData.birthYear}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -865,6 +883,7 @@ const Registration = () => {
                     it to appear on the conference badge.
                   </label>
                   <input
+                    className={`${DarkMode ? "input-dark" : ""}`}
                     type="text"
                     id="primaryAffiliation"
                     name="primaryAffiliation"
@@ -882,6 +901,11 @@ const Registration = () => {
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -898,12 +922,17 @@ const Registration = () => {
                     7. Please enter your email address.
                   </label>
                   <input
+                    className={`${DarkMode ? "input-dark" : ""}`}
                     type="email"
                     id="email"
                     name="email"
                     value={emailid}
                     readOnly
-                    style={{ backgroundColor: "#e5e5e5" }}
+                    style={{
+                      backgroundColor: !DarkMode
+                        ? "#e5e5e5"
+                        : "rgb(139 120 120)",
+                    }}
                     required
                   />
                 </div>
@@ -917,6 +946,11 @@ const Registration = () => {
                       name="contactNumberCode"
                       value={formData.contactNumberCode}
                       onChange={handleChange}
+                      style={
+                        DarkMode
+                          ? { backgroundColor: "#555", color: "white" }
+                          : {}
+                      }
                       required
                     >
                       <option value="">Select a country code</option>
@@ -927,6 +961,7 @@ const Registration = () => {
                       ))}
                     </select>
                     <input
+                      className={`${DarkMode ? "input-dark" : ""}`}
                       type="tel"
                       id="contactNumber"
                       name="contactNumber"
@@ -957,6 +992,11 @@ const Registration = () => {
                       name="whatsappNumberCode"
                       value={formData.whatsappNumberCode}
                       onChange={handleChange}
+                      style={
+                        DarkMode
+                          ? { backgroundColor: "#555", color: "white" }
+                          : {}
+                      }
                     >
                       <option value="">Select a country code</option>
                       {updatedCountryCodes.map((country) => (
@@ -966,6 +1006,7 @@ const Registration = () => {
                       ))}
                     </select>
                     <input
+                      className={`${DarkMode ? "input-dark" : ""}`}
                       type="tel"
                       id="whatsappNumber"
                       name="whatsappNumber"
@@ -994,6 +1035,11 @@ const Registration = () => {
                     name="paperCount"
                     value={formData.paperCount}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -1019,6 +1065,7 @@ const Registration = () => {
                       handleInputChange={(value) =>
                         handleChange({ target: { name: "paper1Id", value } })
                       }
+                      dark={DarkMode}
                     />
                   </div>
                 )}
@@ -1032,6 +1079,7 @@ const Registration = () => {
                       handleInputChange={(value) =>
                         handleChange({ target: { name: "paper2Id", value } })
                       }
+                      dark={DarkMode}
                     />
                   </div>
                 )}
@@ -1044,6 +1092,11 @@ const Registration = () => {
                     name="profile"
                     value={formData.profile}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -1064,6 +1117,11 @@ const Registration = () => {
                     name="accompanyingPersons"
                     value={formData.accompanyingPersons}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -1082,6 +1140,11 @@ const Registration = () => {
                       name="isIshmtMember"
                       value={formData.isIshmtMember}
                       onChange={handleChange}
+                      style={
+                        DarkMode
+                          ? { backgroundColor: "#555", color: "white" }
+                          : {}
+                      }
                       required
                     >
                       <option value="">Select</option>
@@ -1099,6 +1162,7 @@ const Registration = () => {
                       ISHMT ID (PDF or image file) :
                     </label>
                     <input
+                      className={`${DarkMode ? "input-dark" : ""}`}
                       type="file"
                       id="ishmtIDFile"
                       name="ishmtIDFile"
@@ -1120,6 +1184,7 @@ const Registration = () => {
                       13.b ISHMT ID No. :
                     </label>
                     <input
+                      className={`${DarkMode ? "input-dark" : ""}`}
                       type="text"
                       id="ishmtIDno"
                       name="ishmtIDno"
@@ -1154,7 +1219,7 @@ const Registration = () => {
           )}
           {step === 2 && res && (
             <div
-              className="registrationContainer"
+              className={`registrationContainer${DarkMode ? "-dark" : ""}`}
               style={{ marginBottom: "20px" }}
             >
               {!registrationSuccess && (
@@ -1184,8 +1249,13 @@ const Registration = () => {
                 accompanyingFees={accompanyingFees}
                 formData={formData}
                 res={res}
+                DarkMode={DarkMode}
               />
-              <RegistrationDetails formData={formData} earlybird={earlybird} />
+              <RegistrationDetails
+                formData={formData}
+                earlybird={earlybird}
+                DarkMode={DarkMode}
+              />
               <br></br>
               {!registrationSuccess && (
                 <>
@@ -1246,6 +1316,7 @@ const Registration = () => {
                       <span className="disclaimer">(Format: DUF5316282)</span>
                     </label>
                     <input
+                      className={`${DarkMode ? "input-dark" : ""}`}
                       type="text"
                       id="paymentReferenceNumber"
                       name="paymentReferenceNumber"
@@ -1271,6 +1342,8 @@ const Registration = () => {
                         resize: "vertical",
                         border: "1px solid black", // Add the border style
                         padding: "5px",
+                        backgroundColor: DarkMode ? "#555" : "white",
+                        color: DarkMode ? "white" : "black",
                       }}
                     />
                   </div>
@@ -1279,6 +1352,7 @@ const Registration = () => {
                   <div className="form-group">
                     <label>
                       <input
+                        className={`${DarkMode ? "input-dark" : ""}`}
                         type="checkbox"
                         checked={isDeclarationChecked}
                         required
@@ -1292,6 +1366,7 @@ const Registration = () => {
                     {formData.isIshmtMember === "Yes" && (
                       <label>
                         <input
+                          className={`${DarkMode ? "input-dark" : ""}`}
                           type="checkbox"
                           checked={isStrictActionChecked}
                           required

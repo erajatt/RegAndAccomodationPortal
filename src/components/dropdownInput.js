@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./dropdownInput.css";
 
-const DropdownTextInput = ({ inputValue, handleInputChange }) => {
+const DropdownTextInput = ({ inputValue, handleInputChange, dark }) => {
   const [filteredOptions, setFilteredOptions] = useState([]);
   const maxOption = 999;
   const [showWarning, setShowWarning] = useState(false);
@@ -26,6 +26,7 @@ const DropdownTextInput = ({ inputValue, handleInputChange }) => {
           value={inputValue}
           onChange={handleInputInternalChange} // Use the internal handler
           list="options"
+          style={dark ? { backgroundColor: "#555", color: "white" } : {}}
         />
         <datalist id="options">
           {filteredOptions.map((option) => (

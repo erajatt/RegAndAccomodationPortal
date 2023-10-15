@@ -21,7 +21,7 @@ const Home = (props) => {
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
-
+  const DarkMode = props.DarkMode;
   const setValues = async (token) => {
     try {
       setLoading(true);
@@ -155,11 +155,17 @@ const Home = (props) => {
         <Loading />
       ) : (
         <div
-          className="home-container scroll"
+          className={`home-container${DarkMode ? "-dark" : ""} scroll`}
           style={{ height: height, textAlign: "center" }}
         >
           {!formFilled && !isVerified && (
-            <h1 style={{ marginTop: "15vh", marginBottom: "20px" }}>
+            <h1
+              style={{
+                marginTop: "15vh",
+                marginBottom: "20px",
+                color: DarkMode ? "white" : "",
+              }}
+            >
               Welcome to the Home Page of the Registration Portal of IHMTC-2023
             </h1>
           )}
@@ -172,11 +178,11 @@ const Home = (props) => {
           )}
           {isVerified && (
             <>
-              <h1>
+              <h1 style={{ color: DarkMode ? "white" : "" }}>
                 {" "}
                 Congratulations on completing your registration for IHMTC 2023!
               </h1>
-              <h3>
+              <h3 style={{ color: DarkMode ? "white" : "" }}>
                 {" "}
                 NOTE: Your registration for the IHMTC 2023 as per the details
                 provided below has been verified and is now complete.
@@ -191,17 +197,23 @@ const Home = (props) => {
           )}
 
           {isAdmin && (
-            <Link to="/accommodationWaitingList" className="button admin-button">
+            <Link
+              to="/accommodationWaitingList"
+              className="button admin-button"
+            >
               Show accommodation waiting list
             </Link>
           )}
 
           {formFilled && !isVerified && (
             <div>
-              <h1 className="congrats">
+              <h1
+                className="congrats"
+                style={{ color: DarkMode ? "white" : "" }}
+              >
                 Thanks for filling the IHMTC 2023 registration form.
               </h1>
-              <h3>
+              <h3 style={{ color: DarkMode ? "white" : "" }}>
                 <strong>NOTE:</strong> Your registration as per the details
                 provided below is pending verification. The conference
                 organizing committee after verifying payment status will send
@@ -216,6 +228,7 @@ const Home = (props) => {
               <RegistrationDetailsVerif
                 formData={formData1}
                 isVerified={isVerified}
+                DarkMode={DarkMode}
               />
               {!isVerified && (
                 <FileDownload
@@ -223,6 +236,7 @@ const Home = (props) => {
                   userId={formData1._id}
                   cv={cv}
                   isVerified={isVerified}
+                  DarkMode={DarkMode}
                 />
               )}
             </>
@@ -230,7 +244,10 @@ const Home = (props) => {
 
           {formFilled && !isVerified && (
             <div className="last">
-              <h3 className="verification-msg">
+              <h3
+                className="verification-msg"
+                style={{ color: DarkMode ? "white" : "" }}
+              >
                 We are currently verifying your registration details. You will
                 be notified once your submitted data is verified.{" "}
               </h3>
@@ -247,8 +264,14 @@ const Home = (props) => {
               Book Your Accommodation <br />
             </Link>
             {showAccommodationModal && (
-              <div className="modal">
-                <div className="modal-content">
+              <div
+                className="modal"
+                style={{
+                  color: DarkMode ? "white" : "",
+                  backgroundColor: DarkMode ? "555" : "white",
+                }}
+              >
+                <div className={`modal-content${DarkMode?"-dark":""}`} >
                   <p>
                     Student hostel rooms are only available for booking
                     currently. Click OK to proceed. Otherwise, wait for the

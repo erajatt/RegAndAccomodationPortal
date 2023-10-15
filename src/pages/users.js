@@ -6,7 +6,7 @@ import Loading from "../components/Loading";
 import { toast } from "react-toastify";
 import "./users.css";
 
-const Users = () => {
+const Users = (props) => {
   const [users, setUsers] = useState([]);
   const [isAdmin, setAdmin] = useState(true);
   const [searchInput, setSearchInput] = useState("");
@@ -17,7 +17,7 @@ const Users = () => {
   const [loadingIf, setLoadingIf] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userCount, setUserCount] = useState(0);
-
+  const DarkMode = props.DarkMode;
 
   const fetchUserData = async (token) => {
     try {
@@ -49,7 +49,6 @@ const Users = () => {
     filterUsers();
     setUserCount(filteredUsers.length);
   }, [filterUsers, filteredUsers]);
-  
 
   useEffect(() => {
     const cookie = document.cookie;
@@ -308,10 +307,11 @@ const Users = () => {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: ${DarkMode ? "#555" : "#f4f4f4"};
+            color: ${DarkMode ? "white" : "black"};
           }
           h3 {
-            color: #333;
+            color: ${DarkMode ? "white" : "black"};
           }
           p {
             margin: 0;
@@ -319,11 +319,11 @@ const Users = () => {
             margin-bottom: 10px;
           }
           strong {
-            color: #333;
+            color: ${DarkMode ? "white" : "black"};
           }
           .container {
             padding: 20px;
-            background-color: #fff;
+            background-color: ${DarkMode ? "#555" : "#f4f4f4"};
             border-radius: 5px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
           }
@@ -488,9 +488,11 @@ const Users = () => {
 
   return (
     isAdmin && (
-      <div className="userscontainer">
+      <div className={`userscontainer${DarkMode ? "-dark" : ""}`}>
         <h2>User Management</h2>
-        <div className="user-count">Total Registered Users: {userCount}</div>
+        <div className={`user-count${DarkMode ? "-dark" : ""}`}>
+          Total Registered Users: {userCount}
+        </div>
         <input
           type="text"
           placeholder="Search by Email"
@@ -561,7 +563,7 @@ const Users = () => {
             )}
           </button>
         </div>
-        <div className="table-container">
+        <div className={`table-container${DarkMode ? "-dark" : ""}`}>
           <table>
             <thead>
               <tr>

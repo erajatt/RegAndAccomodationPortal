@@ -11,6 +11,7 @@ const FeeBreakdown = ({
   accompanyingFees,
   formData,
   res,
+  DarkMode
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [earlybird, setEarlybird] = useState(false);
@@ -47,7 +48,7 @@ const FeeBreakdown = ({
   };
 
   return (
-    <div className="fee-breakdown">
+    <div className={`fee-breakdown${DarkMode?"-dark":""}`}>
       <div className="fee-header" onClick={toggleDropdown}>
         Fee Breakdown{" "}
         <span className={`dropdown-icon ${isDropdownOpen ? "open" : ""}`}>
@@ -55,7 +56,7 @@ const FeeBreakdown = ({
         </span>
       </div>
       {isDropdownOpen && (
-        <table className="fee-details">
+        <table className={`fee-details${DarkMode?"-dark":""}`}>
           <tr>
             <td>Base Fees according to your category:</td>
             <td></td>

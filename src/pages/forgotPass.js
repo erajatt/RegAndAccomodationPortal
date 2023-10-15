@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import Loading from "../components/Loading";
 // import "bootstrap/dist/css/bootstrap.min.css";
 
-const ForgotPass = () => {
+const ForgotPass = (props) => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOTP] = useState("");
@@ -19,7 +19,7 @@ const ForgotPass = () => {
   const [cookies, setCookies] = useCookies(["otp_token"]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const DarkMode = props.DarkMode;
   function isPasswordStrong(password) {
     const passwordRegex =
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
@@ -104,17 +104,21 @@ const ForgotPass = () => {
   };
 
   return (
-    <div className="container">
+    <div className={`container${DarkMode ? "-dark" : ""}`}>
       {step === 1 && (
-        <div style={{ width: "65%" }} className="container">
+        <div
+          style={{ width: "65%" }}
+          className={`container${DarkMode ? "-dark" : ""}`}
+        >
           <form
             onSubmit={handleEmailSubmit}
-            className="bg-white p-6 rounded-lg shadow-md"
+            className={`forgot${DarkMode ? "-dark" : ""}`}
           >
             <div className="mb-4">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className={`block text-sm font-medium text-gray-700`}
+                style={DarkMode ? { color: "white" } : {}}
               >
                 Enter Email:
               </label>
@@ -123,7 +127,7 @@ const ForgotPass = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 p-2 border rounded w-full focus:outline-none focus:ring focus:border-blue-300"
+                className={`${DarkMode ? "input-dark" : ""}`}
                 required
               />
             </div>
@@ -140,15 +144,19 @@ const ForgotPass = () => {
         </div>
       )}
       {step === 2 && (
-        <div style={{ width: "65%" }} className="container">
+        <div
+          style={{ width: "65%" }}
+          className={`container${DarkMode ? "-dark" : ""}`}
+        >
           <form
             onSubmit={handleOTPSubmit}
-            className="bg-white p-6 rounded-lg shadow-md"
+            className={`forgot${DarkMode ? "-dark" : ""}`}
           >
             <div className="form-group">
               <label
                 className="block text-sm font-medium text-gray-700"
                 htmlFor="otp"
+                style={DarkMode ? { color: "white" } : {}}
               >
                 Enter OTP:{" "}
               </label>
@@ -157,7 +165,7 @@ const ForgotPass = () => {
                 id="otp"
                 value={otp}
                 onChange={(e) => setOTP(e.target.value)}
-                className="mt-1 p-2 border rounded w-full focus:outline-none focus:ring focus:border-blue-300"
+                className={`${DarkMode ? "input-dark" : ""}`}
                 required
               />
             </div>
@@ -173,24 +181,28 @@ const ForgotPass = () => {
         </div>
       )}
       {step === 3 && (
-        <div style={{ width: "65%" }} className="container">
+        <div
+          style={{ width: "65%" }}
+          className={`container${DarkMode ? "-dark" : ""}`}
+        >
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="bg-white p-6 rounded-lg shadow-md"
+            className={`forgot${DarkMode ? "-dark" : ""}`}
           >
             <div className="form-group">
               <label
                 className="block text-sm font-medium text-gray-700"
                 htmlFor="newPassword"
+                style={DarkMode ? { color: "white" } : {}}
               >
                 Enter new password:
               </label>
               <input
+                className={`${DarkMode ? "input-dark" : ""}`}
                 type="password"
                 id="newPassword"
                 onChange={(e) => setNewPassword(e.target.value)}
                 {...register("newPassword")}
-                className="mt-1 p-2 border rounded w-full focus:outline-none focus:ring focus:border-blue-300"
                 required
               />
               <p style={{ color: `red`, fontSize: `10px` }}>
@@ -208,7 +220,7 @@ const ForgotPass = () => {
                 id="reEnterPassword"
                 onChange={(e) => setReEnterPassword(e.target.value)}
                 {...register("reEnterPassword")}
-                className="mt-1 p-2 border rounded w-full focus:outline-none focus:ring focus:border-blue-300"
+                className={`${DarkMode ? "input-dark" : ""}`}
                 required
               />
               <p style={{ color: `red`, fontSize: `10px` }}>

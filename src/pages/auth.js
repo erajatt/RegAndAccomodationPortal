@@ -13,9 +13,9 @@ import ReCAPTCHA from "react-google-recaptcha";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const Auth = () => {
+const Auth = (props) => {
   const [mode, setMode] = useState(true);
-
+  const isDarkMode = props.DarkMode;
   const switchToLoginMode = async () => {
     setMode(true);
   };
@@ -42,7 +42,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="authWrapper my-5">
+    <div className={`authWrapper${isDarkMode ? "-dark" : ""}`}>
       <div
         className="welcomeMessage"
         style={{ color: colors[colorIndex], textAlign: "center" }}
@@ -50,25 +50,32 @@ const Auth = () => {
         <p style={messageStyles}>Welcome to IHMTC 2023 Registrations!!!</p>
       </div>
       <h1 style={{ fontWeight: "700" }}>IHMTC Registration Portal</h1>
-      <div className="authCard scroll">
+      <div className={`authCard${isDarkMode ? "-dark" : ""} scroll`}>
         <div className="authMode">
           <h3
-            className={`loginMode ${mode ? "active" : ""}`}
+            className={`loginMode${isDarkMode ? "-dark" : ""} ${
+              mode ? "active" : ""
+            }`}
             onClick={() => setMode(true)}
           >
             Login
           </h3>
           <h3
-            className={`signinMode ${!mode ? "active" : ""}`}
+            className={`signinMode${isDarkMode ? "-dark" : ""} ${
+              !mode ? "active" : ""
+            }`}
             onClick={() => setMode(false)}
           >
             Sign Up
           </h3>
         </div>
         {mode ? (
-          <LoginForm />
+          <LoginForm DarkMode={isDarkMode} />
         ) : (
-          <SignUpForm switchToLoginMode={switchToLoginMode} />
+          <SignUpForm
+            DarkMode={isDarkMode}
+            switchToLoginMode={switchToLoginMode}
+          />
         )}
       </div>
     </div>
@@ -76,14 +83,14 @@ const Auth = () => {
 };
 export default Auth;
 
-const LoginForm = () => {
+const LoginForm = (props) => {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [, setCookies] = useCookies(["access_token"]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-
+  const DarkMode = props.DarkMode;
   const schema = yup.object().shape({
     userEmail: yup.string().email().required("Email is required"),
     userPassword: yup
@@ -128,9 +135,18 @@ const LoginForm = () => {
   if (loading) content = <Loading />;
   else {
     content = (
-      <form onSubmit={handleSubmit(onSubmit)} className="authForm">
-        <label htmlFor="useremail">Email ID:</label>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={`authForm${DarkMode ? "-dark" : ""}`}
+      >
+        <label
+          className={`${DarkMode ? "label-dark" : ""}`}
+          htmlFor="useremail"
+        >
+          Email ID:
+        </label>
         <input
+          className={`${DarkMode ? "input-dark" : ""}`}
           type="email"
           placeholder="Email"
           id="useremail"
@@ -143,7 +159,11 @@ const LoginForm = () => {
 
         <span
           htmlFor="userpassword"
-          style={{ display: "flex", justifyContent: "space-between" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontWeight: "bold",
+          }}
         >
           Password:{" "}
           {!show ? (
@@ -177,6 +197,7 @@ const LoginForm = () => {
           )}
         </span>
         <input
+          className={`${DarkMode ? "input-dark" : ""}`}
           type={show ? "text" : "password"}
           placeholder="Password"
           id="userpassword"
@@ -230,6 +251,7 @@ const SignUpForm = (props) => {
   //   backgroundColor: "blue",
   //   transition: "background-color 0.3s", // Add a smooth transition effect
   // };
+  const DarkMode = props.DarkMode;
 
   function isPasswordStrong(password) {
     const passwordRegex =
@@ -267,7 +289,7 @@ const SignUpForm = (props) => {
         data
       );
       // console.log(response);
-      if (response.data.success == "true") {
+      if (response.data.success === "true") {
         toast.success(response.data.message);
         await props.switchToLoginMode();
       } else {
@@ -287,7 +309,7 @@ const SignUpForm = (props) => {
     content = (
       <form onSubmit={handleSubmit(onSubmit)} className="authForm">
         <label htmlFor="useremail">Email ID:</label>
-        <input
+        <input className={`${DarkMode ? "input-dark" : ""}`}
           type="email"
           placeholder="Email"
           id="useremail"
@@ -332,7 +354,7 @@ const SignUpForm = (props) => {
             />
           )}
         </span>
-        <input
+        <input className={`${DarkMode ? "input-dark" : ""}`}
           type={show ? "text" : "password"}
           placeholder="Password"
           id="userpassword"
@@ -377,7 +399,7 @@ const SignUpForm = (props) => {
             />
           )}
         </span>
-        <input
+        <input className={`${DarkMode ? "input-dark" : ""}`}
           type={showc ? "text" : "password"}
           placeholder="Confirm Password"
           id="confirmPassword"

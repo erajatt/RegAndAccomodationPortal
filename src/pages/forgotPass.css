@@ -98,3 +98,30 @@
   color: #888; /* Dimmed color */
 }
   
+
+.container-dark {
+  min-width: 50vh;
+  text-align: -webkit-center;
+  padding: 30px;
+  height: 100vh;
+  background-color: #333; /* Dark background color */
+  border: 0px solid #110d0d;
+  border-radius: 5px;
+  color: #fff; /* Light text color */
+}
+
+.forgot{
+  background-color: #ffffff; /* White background */
+  padding: 1.5rem; /* Equivalent to 6 units of padding (each unit is 0.25rem) */
+  border-radius: 0.375rem; /* Equivalent to rounded-lg */
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1); /* Equivalent to shadow-md */
+}
+
+.forgot-dark{
+  background-color: #333; /* White background */
+  padding: 1.5rem; /* Equivalent to 6 units of padding (each unit is 0.25rem) */
+  border: 1px solid #fff;
+  color: white;
+  border-radius: 0.375rem; /* Equivalent to rounded-lg */
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1); /* Equivalent to shadow-md */
+}

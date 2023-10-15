@@ -1,13 +1,13 @@
 import React from "react";
 import { useState } from "react";
 import "./RegistrationDetails.css";
-const RegistrationDetails = ({ formData, earlybird }) => {
+const RegistrationDetails = ({ formData, earlybird, DarkMode }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
   return (
-    <div className="fee-breakdown">
+    <div className={`fee-breakdown${DarkMode?"-dark":""}`}>
       <div className="fee-header" onClick={toggleDropdown}>
         Registration Details{" "}
         <span className={`dropdown-icon ${isDropdownOpen ? "open" : ""}`}>
@@ -15,7 +15,7 @@ const RegistrationDetails = ({ formData, earlybird }) => {
         </span>
       </div>
       {isDropdownOpen && (
-        <table className="fee-details">
+        <table className={`fee-details${DarkMode?"-dark":""}`}>
           {formData.firstName && (
             <tr>
               <td>First Name:</td> <td>{formData.firstName}</td>

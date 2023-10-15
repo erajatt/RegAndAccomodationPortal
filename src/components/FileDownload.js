@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import VerificationBadge from "./verificationBadge";
 import DownloadForOfflineOutlined from "@mui/icons-material/DownloadForOfflineOutlined";
 
-const FileDownload = ({ isIshmtMember, userId, cv, isVerified }) => {
+const FileDownload = ({ isIshmtMember, userId, cv, isVerified, DarkMode }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -96,10 +96,17 @@ const FileDownload = ({ isIshmtMember, userId, cv, isVerified }) => {
   };
 
   return (
-    <div className="fee-breakdown table">
-      <div className="fee-header" onClick={toggleDropdown}>
+    <div className={`fee-breakdown${DarkMode ? "-dark" : ""} table${DarkMode ? "-dark" : ""}`}>
+      <div
+        className="fee-header"
+        style={DarkMode ? { color: "white" } : {}}
+        onClick={toggleDropdown}
+      >
         Download Files{" "}
-        <span className={`dropdown-icon ${isDropdownOpen ? "open" : ""}`}>
+        <span
+          style={DarkMode ? { color: "white" } : {}}
+          className={`dropdown-icon ${isDropdownOpen ? "open" : ""}`}
+        >
           ▼
         </span>
       </div>

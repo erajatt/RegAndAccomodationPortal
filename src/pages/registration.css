@@ -11,6 +11,19 @@
   margin-top: 20px;
 }
 
+.registrationContainer-dark {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #444; /* Adjust the border color for dark mode */
+  background-color: #222; /* Dark background color */
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1); /* Adjust the shadow color */
+  border-radius: 25px;
+  scroll-behavior: smooth;
+  margin-top: 20px;
+  color: #fff; /* Light text color for dark mode */
+}
+
 .labelText::after {
   content: " *";
   color: red;

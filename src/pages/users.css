@@ -136,3 +136,105 @@ button:disabled{
   color: #333;
 }
 
+.userscontainer-dark {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #333; /* Dark background color */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  justify-items: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 20px;
+  text-align: center;
+  overflow: overlay;
+  border-radius: 25px;
+  box-shadow: 5px 6px 6px rgb(0 0 0 / 10%);
+  color: #fff; /* Light text color */
+}
+
+.table-container-dark {
+  max-width: 100%;
+  max-height: 70vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+  background-color: #444; /* Dark background color */
+  border-radius: 25px;
+  box-shadow: 5px 6px 6px rgb(0 0 0 / 10%);
+}
+
+.userscontainer-dark h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: #fff; /* Light text color */
+  align-self: center;
+}
+
+.userscontainer-dark button {
+  padding: 6px 9px;
+  background-color: #007bff;
+  font-size: 13px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.userscontainer-dark button:hover {
+  background-color: #0056b3;
+}
+
+.userscontainer-dark .delete-button {
+  background-color: #dc3545;
+}
+
+.userscontainer-dark .delete-button:hover {
+  background-color: #c82333;
+}
+
+.userscontainer-dark .download-button {
+  background-color: #28a745;
+}
+
+.userscontainer-dark .download-button:hover {
+  background-color: #218838;
+}
+
+.userscontainer-dark .download1-button {
+  background-color: #2cd1c9;
+}
+
+.userscontainer-dark .download1-button:hover {
+  background-color: #2b91a0;
+}
+
+.userscontainer-dark .view-button {
+  background-color: #c7da33;
+}
+
+.userscontainer-dark .view-button:hover {
+  background-color: #a3bd0e;
+}
+
+.userscontainer-dark .download-all-button {
+  margin: 10px;
+  background-color: #17a2b8;
+}
+
+.userscontainer-dark .download-all-button:hover {
+  background-color: #138496;
+}
+
+.user-count-dark {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.userscontainer-dark th{
+  background-color: #333; /* Dark background color for th */
+  font-weight: bold;
+  color: #fff; 
+}

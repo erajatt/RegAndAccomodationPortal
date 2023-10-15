@@ -19,6 +19,19 @@
   box-shadow: 5px 6px 6px rgb(0 0 0 / 10%);
 }
 
+.home-container-dark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  text-align: center;
+  overflow: overlay;
+  background-color: #333; /* Dark background color */
+  border-radius: 25px;
+  box-shadow: 5px 6px 6px rgba(255, 255, 255, 0.1); /* Adjust the shadow color */
+  color: #fff; /* Light text color for dark mode */
+}
+
 .registrationContainer {
   max-width: 600px;
   margin: 0 auto;
@@ -128,6 +141,15 @@ h3 {
 
 .modal-content {
   background-color: #fff;
+  margin: 20% auto; /* Center the modal vertically */
+  padding: 20px;
+  max-width: 400px; /* Set a maximum width for the modal */
+  text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+}
+
+.modal-content-dark {
+  background-color: #555;
   margin: 20% auto; /* Center the modal vertically */
   padding: 20px;
   max-width: 400px; /* Set a maximum width for the modal */

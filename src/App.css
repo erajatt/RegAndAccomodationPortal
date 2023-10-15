@@ -1,11 +1,9 @@
-.App{
+.App {
   background: radial-gradient(#0c3e53, transparent);
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 
-
-
-.button {
+button {
   display: inline-block;
   padding: 10px 20px;
   background-color: #408fe4;
@@ -19,11 +17,36 @@
   margin-right: 10px;
 }
 
-.button:hover {
+button:hover {
   background-color: #0056b3;
 }
 
-.input:disabled{
+input:disabled {
   cursor: not-allowed;
 }
 
+
+.App-dark {
+  background: radial-gradient(#051f2f, #000, transparent); /* Dark background gradient */
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  color: #ffffff; /* Light text color */
+}
+
+.label-dark {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #fff; /* Light text color */
+}
+
+.input-dark {
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #555; /* Dark input background */
+  color: #fff; /* Light text color */
+}
+
+
+/* You may need to customize other elements in your application to achieve a consistent dark mode appearance. */

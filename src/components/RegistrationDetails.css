@@ -6,12 +6,31 @@
   /* border-collapse: collapse; */
 }
 
+.fee-breakdown-dark {
+  border: 1px solid #ffffff;
+  padding: 10px;
+  margin-bottom: 20px;
+  /* border-collapse: collapse; */
+  border-radius: 25px;
+
+}
+
 .fee-details {
   border-collapse: collapse;
 }
 
 .fee-details td {
   border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.fee-details-dark {
+  border-collapse: collapse;
+}
+
+.fee-details-dark td {
+  border: 1px solid #ffffff;
   padding: 8px;
   text-align: left;
 }

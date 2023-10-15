@@ -11,6 +11,17 @@
     margin-top: 20px;
   }
   
+  .registrationContainer-dark {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #555;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
+    scroll-behavior: smooth;
+    margin-top: 20px;
+  }
   .labelText::after {
     content: " *";
     color: red;
