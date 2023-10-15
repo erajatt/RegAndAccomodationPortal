@@ -111,7 +111,7 @@ const FileDownload = ({ isIshmtMember, userId, cv, isVerified, DarkMode }) => {
         </span>
       </div>
       {isDropdownOpen && (
-        <div className="container">
+        <div className="container1">
           {isIshmtMember ? (
             <>
               <button
