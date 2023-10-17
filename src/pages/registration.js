@@ -751,7 +751,9 @@ const Registration = (props) => {
         >
           {step === 1 && (
             <div className={`registrationContainer${DarkMode ? "-dark" : ""}`}>
-              <h1>Conference Registration</h1>
+              <h1 style={{ color: DarkMode ? "white" : "black" }}>
+                Conference Registration
+              </h1>
               <p style={{ color: "red", textAlign: "right" }}>
                 * -&gt; required fields
               </p>
@@ -1232,7 +1234,7 @@ const Registration = (props) => {
                 </button>
               )}
 
-              <h1>
+              <h1 style={{ color: DarkMode ? "white" : "black" }}>
                 {earlybird && <span>Early-Bird</span>} Registration Details
               </h1>
               <p>
