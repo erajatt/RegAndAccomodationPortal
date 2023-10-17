@@ -15,6 +15,7 @@ const Accommodation = (props) => {
   const [accommodationSuccess, setAccommodationSuccess] = useState(false);
   const [accompanyingPersons, setAccompanyingPersons] = useState("");
   const [isWaiting, setIsWaiting] = useState("false");
+  const [isAssigned, setIsAssigned] = useState("false");
   const [accommodationChoice, setaccommodationChoice] = useState("");
 
   const [formData, setFormData] = useState({
@@ -38,14 +39,17 @@ const Accommodation = (props) => {
         if (response.data.success === "true") {
           setAccompanyingPersons(response.data.accompanyingPersons);
           setIsWaiting(response.data.isWaiting);
-          if (isWaiting === "true") {
+          setIsAssigned(response.data.isAssigned);
+          console.log("first called", response.data);
+          if (isAssigned) {
             try {
-              const response = await axios.post(
-                "https://regportal.onrender.com/accommodation/access",
+              const response1 = await axios.post(
+                "https://regportal.onrender.com/accommodation/fetch",
                 { token }
               );
-              if (response.data.success === "true") {
-                setaccommodationChoice(response.data.accommodationChoice);
+              console.log("second called", response1.data.accommodationChoice);
+              if (response1.data.success === "true") {
+                setaccommodationChoice(response1.data.accommodationChoice);
               }
             } catch (error) {
               toast.error(error);
@@ -201,12 +205,12 @@ const Accommodation = (props) => {
                     required
                   >
                     <option value="">Select</option>
-                    {isWaiting === "true" && (
+                    {isAssigned === true && (
                       <option value={accommodationChoice}>
                         {accommodationChoice}
                       </option>
                     )}
-                    {isWaiting === "false" && accompanyingPersons === "0" && (
+                    {isAssigned === false && accompanyingPersons === "0" && (
                       <>
                         <option value="SHSPSO">
                           Hostel (single occupancy) – 2600
@@ -216,12 +220,12 @@ const Accommodation = (props) => {
                         </option>
                       </>
                     )}
-                    {isWaiting === "false" && accompanyingPersons === "1" && (
+                    {isAssigned === false && accompanyingPersons === "1" && (
                       <option value="SHDPDO">
                         Hostel (shared rooms with double occupancy) – 4000
                       </option>
                     )}
-                    {isWaiting === "false" && accompanyingPersons === "2" && (
+                    {isAssigned === false && accompanyingPersons === "2" && (
                       <option value="SHTPSDO">
                         Hostel (shared rooms with double occupancy) – 4000 +
                         Hostel (single occupancy) – 2600 = 6600
