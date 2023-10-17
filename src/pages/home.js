@@ -22,6 +22,7 @@ const Home = (props) => {
   const [isStudent, setIsStudent] = useState(false);
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
   const [token, setToken] = useState(null);
+  const [isWaiting, setIsWaiting] = useState("false");
   const navigate = useNavigate();
   const DarkMode = props.DarkMode;
   const setValues = async (token) => {
@@ -52,6 +53,7 @@ const Home = (props) => {
       if (response.data) {
         console.log(response.data);
         setIsStudent(response.data.isStudent);
+        setIsWaiting(response.data.isWaiting);
       }
     } catch (error) {
       toast.error(error);
@@ -203,6 +205,15 @@ const Home = (props) => {
               to="/accommodationWaitingList"
               className="button admin-button"
             >
+              Show waiting list
+            </Link>
+          )}
+
+          {isAdmin && (
+            <Link
+              to="/accommodationWaitingList"
+              className="button admin-button"
+            >
               Show accommodation waiting list
             </Link>
           )}
@@ -243,20 +254,8 @@ const Home = (props) => {
               )}
             </>
           )}
-
-          {/* {formFilled && !isVerified && (
-            <div className="last">
-              <h3
-                className="verification-msg"
-                style={{ color: DarkMode ? "white" : "" }}
-              >
-                We are currently verifying your registration details. You will
-                be notified once your submitted data is verified.{" "}
-              </h3>
-            </div>
-          )} */}
           <div>
-            {!accommodationFormFilled && (
+            {(isStudent && !accommodationFormFilled) ||(!isStudent&&!isWaiting&&!accommodationFormFilled) && (
               <Link
                 onClick={(e) => {
                   handleAccommodationButtonClick(e);
@@ -267,11 +266,23 @@ const Home = (props) => {
                 Book Your Accommodation <br />
               </Link>
             )}
+            {/* {(isStudent && !accommodationFormFilled) ||(!isStudent&&!isWaiting&&!accommodationFormFilled) && (
+              <strong>
+                Your name is on the Guest House waiting list. You'll receive an
+                email with your allotted accommodation soon. Thank you for your
+                patience.
+              </strong>
+            )} */}
             {accommodationFormFilled && !accommodationVerified && (
               <p>
-                <strong>Thank you for filling the accommodation form. <br/> Your accommodation
-                details are currently under verification.<br/> You will receive an
-                email when your details are verified.<br/><br/></strong>
+                <strong>
+                  Thank you for filling the accommodation form. <br /> Your
+                  accommodation details are currently under verification.
+                  <br /> You will receive an email when your details are
+                  verified.
+                  <br />
+                  <br />
+                </strong>
               </p>
             )}
             {accommodationVerified && (
@@ -279,6 +290,16 @@ const Home = (props) => {
                 Congratulations! Your accommodation details have been verified.
               </p>
             )}
+
+            {!isStudent&&isWaiting&&(
+              <p>
+                Your name is on the Guest House waiting list. You'll receive an
+              email with your allotted accommodation soon. Thank you for your
+              patience.
+              </p>
+            )}
+
+            
             {showAccommodationModal && (
               <div
                 className="modal"
@@ -287,7 +308,7 @@ const Home = (props) => {
                   backgroundColor: DarkMode ? "555" : "white",
                 }}
               >
-                <div className={`modal-content${DarkMode?"-dark":""}`} >
+                <div className={`modal-content${DarkMode ? "-dark" : ""}`}>
                   <p>
                     Student hostel rooms are only available for booking
                     currently. Click OK to proceed. Otherwise, wait for the
@@ -332,7 +353,8 @@ const Home = (props) => {
               >
                 ihmtc2023@gmail.com
               </a>
-              <br/><br/>
+              <br />
+              <br />
             </p>
           </div>
         </div>

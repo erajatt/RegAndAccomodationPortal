@@ -14,11 +14,13 @@ const Accommodation = (props) => {
   const [isDeclarationChecked, setIsDeclarationChecked] = useState(false);
   const [accommodationSuccess, setAccommodationSuccess] = useState(false);
   const [accompanyingPersons, setAccompanyingPersons] = useState("");
+  const [isWaiting, setIsWaiting] = useState("false");
+  const [accommodationChoice, setaccommodationChoice] = useState("");
 
   const [formData, setFormData] = useState({
     arrivalTime: "",
     departureTime: "",
-    accommodationType: "",
+    accommodationChoice: "",
     accommodationPaymentReceipt: null,
     accommodationPaymentReferenceNumber: "",
     token: "",
@@ -33,8 +35,22 @@ const Accommodation = (props) => {
           "https://regportal.onrender.com/accommodation/access",
           { token }
         );
-        if (response.data) {
+        if (response.data.success === "true") {
           setAccompanyingPersons(response.data.accompanyingPersons);
+          setIsWaiting(response.data.isWaiting);
+          if (isWaiting === "true") {
+            try {
+              const response = await axios.post(
+                "https://regportal.onrender.com/accommodation/access",
+                { token }
+              );
+              if (response.data.success === "true") {
+                setaccommodationChoice(response.data.accommodationChoice);
+              }
+            } catch (error) {
+              toast.error(error);
+            }
+          }
         }
       } catch (error) {
         toast.error(error);
@@ -87,8 +103,8 @@ const Accommodation = (props) => {
     setStep(2);
   };
 
-  const calculatePaymentAmount = (accommodationType) => {
-    switch (accommodationType) {
+  const calculatePaymentAmount = (accommodationChoice) => {
+    switch (accommodationChoice) {
       case "SHSPSO":
         return 2600;
       case "SHSPDO":
@@ -174,18 +190,23 @@ const Accommodation = (props) => {
               </p>
               <form encType="multipart/form-data" onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label className="labelText" htmlFor="accommodationType">
+                  <label className="labelText" htmlFor="accommodationChoice">
                     Please choose your accommodation preference.
                   </label>
                   <select
-                    id="accommodationType"
-                    name="accommodationType"
-                    value={formData.accommodationType}
+                    id="accommodationChoice"
+                    name="accommodationChoice"
+                    value={formData.accommodationChoice}
                     onChange={handleChange}
                     required
                   >
                     <option value="">Select</option>
-                    {accompanyingPersons === "0" && (
+                    {isWaiting === "true" && (
+                      <option value={accommodationChoice}>
+                        {accommodationChoice}
+                      </option>
+                    )}
+                    {isWaiting === "false" && accompanyingPersons === "0" && (
                       <>
                         <option value="SHSPSO">
                           Hostel (single occupancy) – 2600
@@ -195,12 +216,12 @@ const Accommodation = (props) => {
                         </option>
                       </>
                     )}
-                    {accompanyingPersons === "1" && (
+                    {isWaiting === "false" && accompanyingPersons === "1" && (
                       <option value="SHDPDO">
                         Hostel (shared rooms with double occupancy) – 4000
                       </option>
                     )}
-                    {accompanyingPersons === "2" && (
+                    {isWaiting === "false" && accompanyingPersons === "2" && (
                       <option value="SHTPSDO">
                         Hostel (shared rooms with double occupancy) – 4000 +
                         Hostel (single occupancy) – 2600 = 6600
@@ -276,7 +297,7 @@ const Accommodation = (props) => {
                     Please visit the following payment link, provide the
                     relevant information, make the payment of{" "}
                     <strong>
-                      ₹ {calculatePaymentAmount(formData.accommodationType)}
+                      ₹ {calculatePaymentAmount(formData.accommodationChoice)}
                     </strong>{" "}
                     and come back here to complete the remaining questions
                     below.
@@ -345,64 +366,65 @@ const Accommodation = (props) => {
                   </div>
                 )}
 
-            {!accommodationSuccess && (
-              <div className="form-group">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={isDeclarationChecked}
-                    required
-                    onChange={() =>
-                      setIsDeclarationChecked(!isDeclarationChecked)
-                    }
-                  />
-                  I declare that the information I have provided is correct.
-                </label>
-                <br />
-                <br />
+                {!accommodationSuccess && (
+                  <div className="form-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={isDeclarationChecked}
+                        required
+                        onChange={() =>
+                          setIsDeclarationChecked(!isDeclarationChecked)
+                        }
+                      />
+                      I declare that the information I have provided is correct.
+                    </label>
+                    <br />
+                    <br />
 
-                <button
-                  type="submit"
-                  className={`submit-button ${
-                    !isDeclarationChecked && "disabled"
-                  }`}
-                  disabled={!isDeclarationChecked}
-                  onClick={(event) => {
-                    const confirmation = window.confirm(
-                      "Are you sure you want to submit the form? This action can't be undone."
-                    );
-                    if (!confirmation) {
-                      event.preventDefault();
-                    }
-                  }}
-                >
-                  Submit
-                </button>
-              </div>
-            )}
+                    <button
+                      type="submit"
+                      className={`submit-button ${
+                        !isDeclarationChecked && "disabled"
+                      }`}
+                      disabled={!isDeclarationChecked}
+                      onClick={(event) => {
+                        const confirmation = window.confirm(
+                          "Are you sure you want to submit the form? This action can't be undone."
+                        );
+                        if (!confirmation) {
+                          event.preventDefault();
+                        }
+                      }}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                )}
 
-            {accommodationSuccess && (
-              <div className="success-message">
-                <p className="success-text">
-                  Accommodation successful! You can now{" "}
-                  <Link to="/home" className="return-link">
-                    return to the homepage
-                  </Link>
-                  .
-                </p>
-              </div>
-            )}
-          </form>
-        </div>
-      )}
-      {accommodationSuccess && (
-        <div className="conf" style={{ top: 0, position: "fixed" }}>
-          <Confetti width={width} height={height} />
+                {accommodationSuccess && (
+                  <div className="success-message">
+                    <p className="success-text">
+                      Accommodation successful! You can now{" "}
+                      <Link to="/home" className="return-link">
+                        return to the homepage
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                )}
+              </form>
+            </div>
+          )}
+          {accommodationSuccess && (
+            <div className="conf" style={{ top: 0, position: "fixed" }}>
+              <Confetti width={width} height={height} />
+            </div>
+          )}
         </div>
       )}
     </div>
-  )}
-  </div>
-)};
+  );
+};
 
 export default Accommodation;

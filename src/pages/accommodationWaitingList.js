@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import Loading from "../components/Loading";
 import { toast } from "react-toastify";
 import "./accommodationWaitingList.css";
 
@@ -8,11 +7,10 @@ const AccommodationWaitingList = (props) => {
   const [users, setUsers] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [userCount, setUserCount] = useState(0);
   const [cookieValue, setCookieValue] = useState("");
   const [isAdmin, setAdmin] = useState(true);
-  const [loading, setLoading] = useState(false);
   const DarkMode = props.DarkMode;
+
   const setValues = async (token) => {
     const response = await axios.post(
       "https://regportal.onrender.com/auth/userAccess",
@@ -21,7 +19,6 @@ const AccommodationWaitingList = (props) => {
       }
     );
     setAdmin(response.data.isAdmin);
-    setCookieValue(token);
   };
 
   const fetchWaitingListData = async (token) => {
@@ -40,17 +37,13 @@ const AccommodationWaitingList = (props) => {
     }
   };
 
-  const filterUsers = useCallback(() => {
+  useEffect(() => {
     const filtered = users.filter((user) =>
       user.userEmail.toLowerCase().includes(searchInput.toLowerCase())
     );
     setFilteredUsers(filtered);
-  }, [users, searchInput]);
-
-  useEffect(() => {
-    filterUsers();
-    setUserCount(filteredUsers.length);
-  }, [filterUsers, filteredUsers]);
+  }, [searchInput]);
+  
 
   useEffect(() => {
     const cookie = document.cookie;
@@ -60,51 +53,56 @@ const AccommodationWaitingList = (props) => {
     );
 
     if (desiredCookie) {
-      const cookieValue = desiredCookie.split("=")[1];
-      setValues(cookieValue);
-      fetchWaitingListData(cookieValue);
+      const cookieVal = desiredCookie.split("=")[1];
+      setValues(cookieVal);
+      setCookieValue(cookieVal);
+      fetchWaitingListData(cookieVal);
     }
   }, []);
 
-  const handleAccommodationTypeChange = async (userId, newValue) => {
+  const handleaccommodationChoiceChange = async (userID, newValue) => {
     const confirmed = window.confirm(
-      "Are you sure, yoh want to give the selected accommodation option to the user? Please note that this action can't be undone."
+      `Are you sure, you want to give ${newValue} to the user? Please note that this action can't be undone.`
     );
     if (confirmed) {
       try {
-        const response = await axios.post(
-          "https://regportal.onrender.com/accommodation/update-accommodation",
+        console.log(userID,cookieValue);
+        const response = await axios.put(
+          "https://regportal.onrender.com/accommodation/assign",
           {
-            userId,
-            newAccommodationType: newValue,
+            userID,
+            accommodationChoice: newValue,
+            token: cookieValue,
           }
         );
 
         if (response.data.success === "true") {
           const updatedUsers = users.map((user) => {
-            if (user._id === userId) {
-              user.accommodationType = newValue;
+            if (user._id === userID) {
+              user.accommodationChoice = newValue;
             }
             return user;
           });
 
           setUsers(updatedUsers);
-          toast.success("Accommodation type updated successfully.");
+          toast.success(
+            "Accommodation type for the user has been updated successfully."
+          );
         } else {
           toast.error("Failed to update accommodation type.");
         }
       } catch (error) {
-        toast.error("An error occurred while updating the accommodation type.");
+        toast.error("Failed to update the accommodation type.");
       }
     }
   };
 
-  const renderAccommodationTypeDropdown = (user) => {
+  const renderaccommodationChoiceDropdown = (user) => {
     return (
       <select
-        value={user.accommodationType}
+        value={user.accommodationChoice}
         onChange={(e) =>
-          handleAccommodationTypeChange(user._id, e.target.value)
+          handleaccommodationChoiceChange(user._id, e.target.value)
         }
         style={
           DarkMode
@@ -115,11 +113,22 @@ const AccommodationWaitingList = (props) => {
               }
             : {}
         }
-        disabled={user.accommodationType ? true : false}
+        disabled={user.accommodationChoice != "None" ? true : false}
       >
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
+        <option value="None">Select</option>
+        <option value="Makeshift guest rooms with attached washroom in hostels/quarters - 1000/- per day">
+          Makeshift guest rooms with attached washroom in hostels/quarters -
+          1000/- per day
+        </option>
+        <option value="Guest House (Single room) - 1400/- per day">
+          Guest House (Single room) - 1400/- per day
+        </option>
+        <option value="Guest House (Double room with Double occupancy) - 2000/- per day">
+          Guest House (Double room with Double occupancy) - 2000/- per day
+        </option>
+        <option value="Guest House (Double room with Single occupancy) - 1700/- per day">
+          Guest House (Double room with Single occupancy) - 1700/- per day
+        </option>
       </select>
     );
   };
@@ -129,7 +138,8 @@ const AccommodationWaitingList = (props) => {
       <div className={`userscontainer${DarkMode ? "-dark" : ""}`}>
         <h2>Accommodation Waiting List</h2>
         <div className={`user-count${DarkMode ? "-dark" : ""}`}>
-          Total waiting users: {userCount}
+          {searchInput==""&&`Total waiting users: ${users.length}`}
+          {searchInput!=""&&`Total waiting users: ${filteredUsers.length}`}
         </div>
         <input
           type="text"
@@ -147,12 +157,20 @@ const AccommodationWaitingList = (props) => {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user) => (
-                <tr key={user._id}>
-                  <td>{user.userEmail}</td>
-                  <td>{renderAccommodationTypeDropdown(user)}</td>
-                </tr>
-              ))}
+              {searchInput != "" &&
+                filteredUsers.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.userEmail}</td>
+                    <td>{renderaccommodationChoiceDropdown(user)}</td>
+                  </tr>
+                ))}
+              {searchInput == "" &&
+                users.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.userEmail}</td>
+                    <td>{renderaccommodationChoiceDropdown(user)}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

@@ -16,7 +16,6 @@ const Users = (props) => {
   const [loadingPf, setLoadingPf] = useState(false);
   const [loadingIf, setLoadingIf] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userCount, setUserCount] = useState(0);
   const DarkMode = props.DarkMode;
 
   const fetchUserData = async (token) => {
@@ -44,31 +43,12 @@ const Users = (props) => {
     }
   }, []);
 
-  const filterUsers = useCallback(() => {
+  useEffect(() => {
     const filtered = users.filter((user) =>
       user.userEmail.toLowerCase().includes(searchInput.toLowerCase())
     );
     setFilteredUsers(filtered);
-  }, [users, searchInput]);
-
-  useEffect(() => {
-    filterUsers();
-    setUserCount(filteredUsers.length);
-  }, [filterUsers, filteredUsers]);
-
-  useEffect(() => {
-    const cookie = document.cookie;
-    const cookieArray = cookie.split("; ");
-    const desiredCookie = cookieArray.find((item) =>
-      item.startsWith("access_token=")
-    );
-
-    if (desiredCookie) {
-      const cookieValue = desiredCookie.split("=")[1];
-      setValues(cookieValue);
-      fetchUserData(cookieValue);
-    }
-  }, []);
+  }, [searchInput]);
 
   const setValues = async (token) => {
     const response = await axios.post(
@@ -461,7 +441,9 @@ const Users = (props) => {
       <div className={`userscontainer${DarkMode ? "-dark" : ""}`}>
         <h2>User Management</h2>
         <div className={`user-count${DarkMode ? "-dark" : ""}`}>
-          Total Registered Users: {userCount}
+          {searchInput === "" && `Total Registered Users: ${users.length}`}
+          {searchInput !== "" &&
+            `Total Registered Users: ${filteredUsers.length}`}
         </div>
         <input
           type="text"
@@ -547,107 +529,214 @@ const Users = (props) => {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user) => (
-                <tr key={user._id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={user.isVerified}
-                      onClick={() => {
-                        handleVerifyUser(user._id);
-                      }}
-                      className={user.isVerified ? "" : "enabled-cursor"}
-                      disabled={user.isVerified}
-                    />
-                  </td>
-                  <td>{user.userEmail}</td>
-                  <td>
-                    {user.accommodationFormFilled ? (
+              {searchInput !== "" &&
+                filteredUsers.map((user) => (
+                  <tr key={user._id}>
+                    <td>
                       <input
                         type="checkbox"
-                        checked={user.accommodationVerified}
+                        checked={user.isVerified}
                         onClick={() => {
-                          handleVerifyUserAccommodation(user._id);
+                          handleVerifyUser(user._id);
                         }}
-                        className={
-                          user.accommodationVerified ? "" : "enabled-cursor"
-                        }
-                        disabled={user.accommodationVerified}
+                        className={user.isVerified ? "" : "enabled-cursor"}
+                        disabled={user.isVerified}
                       />
-                    ) : null}
-                  </td>
+                    </td>
+                    <td>{user.userEmail}</td>
+                    <td>
+                      {user.accommodationFormFilled ? (
+                        <input
+                          type="checkbox"
+                          checked={user.accommodationVerified}
+                          onClick={() => {
+                            handleVerifyUserAccommodation(user._id);
+                          }}
+                          className={
+                            user.accommodationVerified ? "" : "enabled-cursor"
+                          }
+                          disabled={user.accommodationVerified}
+                        />
+                      ) : null}
+                    </td>
 
-                  <td>
-                    <button
-                      className="download1-button"
-                      disabled={loadingStates[user._id]?.downloadISHMTID}
-                      onClick={() => {
-                        handleLoadingStateChange(
-                          user._id,
-                          "downloadISHMTID",
-                          true
-                        );
-                        handleDownloadISHMTID(user._id);
-                      }}
-                    >
-                      {loadingStates[user._id]?.downloadISHMTID ? (
-                        <Loading
-                          color={"#fff"}
-                          height={"40%"}
-                          width={"40%"}
-                          divHeight={"25px"}
-                          divWidth={"75px"}
+                    <td>
+                      <button
+                        className="download1-button"
+                        disabled={loadingStates[user._id]?.downloadISHMTID}
+                        onClick={() => {
+                          handleLoadingStateChange(
+                            user._id,
+                            "downloadISHMTID",
+                            true
+                          );
+                          handleDownloadISHMTID(user._id);
+                        }}
+                      >
+                        {loadingStates[user._id]?.downloadISHMTID ? (
+                          <Loading
+                            color={"#fff"}
+                            height={"40%"}
+                            width={"40%"}
+                            divHeight={"25px"}
+                            divWidth={"75px"}
+                          />
+                        ) : (
+                          "Download"
+                        )}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="download-button"
+                        onClick={() => {
+                          handleLoadingStateChange(
+                            user._id,
+                            "downloadPaymentReciept",
+                            true
+                          );
+                          handleDownloadReceipt(user._id);
+                        }}
+                        disabled={
+                          loadingStates[user._id]?.downloadPaymentReciept
+                        }
+                      >
+                        {" "}
+                        {loadingStates[user._id]?.downloadPaymentReciept ? (
+                          <Loading
+                            color={"#fff"}
+                            height={"40%"}
+                            width={"40%"}
+                            divHeight={"25px"}
+                            divWidth={"75px"}
+                          />
+                        ) : (
+                          "Download"
+                        )}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="view-button"
+                        onClick={() => handleDownloadUserData(user._id)}
+                      >
+                        View
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDeleteUser(user._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              {searchInput === "" &&
+                users.map((user) => (
+                  <tr key={user._id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={user.isVerified}
+                        onClick={() => {
+                          handleVerifyUser(user._id);
+                        }}
+                        className={user.isVerified ? "" : "enabled-cursor"}
+                        disabled={user.isVerified}
+                      />
+                    </td>
+                    <td>{user.userEmail}</td>
+                    <td>
+                      {user.accommodationFormFilled ? (
+                        <input
+                          type="checkbox"
+                          checked={user.accommodationVerified}
+                          onClick={() => {
+                            handleVerifyUserAccommodation(user._id);
+                          }}
+                          className={
+                            user.accommodationVerified ? "" : "enabled-cursor"
+                          }
+                          disabled={user.accommodationVerified}
                         />
-                      ) : (
-                        "Download"
-                      )}
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="download-button"
-                      onClick={() => {
-                        handleLoadingStateChange(
-                          user._id,
-                          "downloadPaymentReciept",
-                          true
-                        );
-                        handleDownloadReceipt(user._id);
-                      }}
-                      disabled={loadingStates[user._id]?.downloadPaymentReciept}
-                    >
-                      {" "}
-                      {loadingStates[user._id]?.downloadPaymentReciept ? (
-                        <Loading
-                          color={"#fff"}
-                          height={"40%"}
-                          width={"40%"}
-                          divHeight={"25px"}
-                          divWidth={"75px"}
-                        />
-                      ) : (
-                        "Download"
-                      )}
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="view-button"
-                      onClick={() => handleDownloadUserData(user._id)}
-                    >
-                      View
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="delete-button"
-                      onClick={() => handleDeleteUser(user._id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      ) : null}
+                    </td>
+
+                    <td>
+                      <button
+                        className="download1-button"
+                        disabled={loadingStates[user._id]?.downloadISHMTID}
+                        onClick={() => {
+                          handleLoadingStateChange(
+                            user._id,
+                            "downloadISHMTID",
+                            true
+                          );
+                          handleDownloadISHMTID(user._id);
+                        }}
+                      >
+                        {loadingStates[user._id]?.downloadISHMTID ? (
+                          <Loading
+                            color={"#fff"}
+                            height={"40%"}
+                            width={"40%"}
+                            divHeight={"25px"}
+                            divWidth={"75px"}
+                          />
+                        ) : (
+                          "Download"
+                        )}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="download-button"
+                        onClick={() => {
+                          handleLoadingStateChange(
+                            user._id,
+                            "downloadPaymentReciept",
+                            true
+                          );
+                          handleDownloadReceipt(user._id);
+                        }}
+                        disabled={
+                          loadingStates[user._id]?.downloadPaymentReciept
+                        }
+                      >
+                        {" "}
+                        {loadingStates[user._id]?.downloadPaymentReciept ? (
+                          <Loading
+                            color={"#fff"}
+                            height={"40%"}
+                            width={"40%"}
+                            divHeight={"25px"}
+                            divWidth={"75px"}
+                          />
+                        ) : (
+                          "Download"
+                        )}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="view-button"
+                        onClick={() => handleDownloadUserData(user._id)}
+                      >
+                        View
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDeleteUser(user._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
