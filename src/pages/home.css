@@ -9,9 +9,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
   margin: 20px;
-  /* min-height: 100vh; */
   text-align: -webkit-center;
   overflow: overlay;
   background-color: #e5e5e5;
@@ -26,10 +24,10 @@
   margin: 20px;
   text-align: center;
   overflow: overlay;
-  background-color: #333; /* Dark background color */
+  background-color: #333;
   border-radius: 25px;
-  box-shadow: 5px 6px 6px rgba(255, 255, 255, 0.1); /* Adjust the shadow color */
-  color: #fff; /* Light text color for dark mode */
+  box-shadow: 5px 6px 6px rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 .registrationContainer {
@@ -44,7 +42,7 @@
 h1 {
   font-size: 28px;
   margin-bottom: 20px;
-  margin-top:20px;
+  margin-top: 20px;
   color: #333;
   font-weight: bold;
 }
@@ -70,6 +68,21 @@ h3 {
   cursor: pointer;
 }
 
+.accommodation-button {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 5px;
+  margin: 10px;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+.accommodation-button:hover {
+  background-color: #0056b3;
+}
 .button:hover {
   background-color: #0056b3;
 }
@@ -104,73 +117,60 @@ h3 {
   transition: background-color 0.3s ease-in-out;
 }
 
-/* .scroll {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  margin: 5px 5px;
-  padding: 15px;
-  text-align: justify;
-}
-.scroll::-webkit-scrollbar {
-  width: 5px;
-}
-.scroll::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-}
-.scroll::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  -webkit-box-shadow: inset 0 0 6px rgb(42, 151, 248);
-} */
 
 .last {
   text-align: -webkit-center;
 }
 
-/* Add this CSS to style the modal */
+
 .modal {
-  /* display: none; */
   position: fixed;
-  z-index: 1000; /* Make sure it's on top of other elements */
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background overlay */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  );
 }
 
 .modal-content {
   background-color: #fff;
-  margin: 20% auto; /* Center the modal vertically */
+  margin: 20% auto;
   padding: 20px;
-  max-width: 400px; /* Set a maximum width for the modal */
+  max-width: 400px;
   text-align: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .modal-content-dark {
   background-color: #555;
-  margin: 20% auto; /* Center the modal vertically */
+  margin: 20% auto; 
   padding: 20px;
-  max-width: 400px; /* Set a maximum width for the modal */
+  max-width: 400px;
   text-align: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); 
 }
 
-/* Style the buttons inside the modal */
 .modal-content button {
   padding: 10px 20px;
   margin: 10px;
   cursor: pointer;
   border: none;
-  background-color: #007bff; /* Blue color for buttons */
-  color: #fff; /* White text color for buttons */
+  background-color: #007bff; 
+  color: #fff; 
 }
 
-/* Hover effect for buttons */
+
 .modal-content button:hover {
-  background-color: #0056b3; /* Darker blue color on hover */
+  background-color: #0056b3;
 }
 
-/* Add more styling as needed */
+.next-icon {
+  margin-left: 8px;
+}
 

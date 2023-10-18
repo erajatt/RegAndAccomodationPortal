@@ -7,6 +7,7 @@ import RegistrationDetailsVerif from "../components/RegistrationDetailsVerif.js"
 import { toast } from "react-toastify";
 import FileDownload from "../components/FileDownload";
 import useWindowSize from "react-use/lib/useWindowSize";
+import { hover } from "@testing-library/user-event/dist/hover";
 
 const Home = (props) => {
   const { width, height } = useWindowSize();
@@ -211,15 +212,6 @@ const Home = (props) => {
               to="/accommodationWaitingList"
               className="button admin-button"
             >
-              Show waiting list
-            </Link>
-          )}
-
-          {isAdmin && (
-            <Link
-              to="/accommodationWaitingList"
-              className="button admin-button"
-            >
               Show accommodation waiting list
             </Link>
           )}
@@ -301,8 +293,7 @@ const Home = (props) => {
                   onClick={(e) => {
                     handleAccommodationButtonClick(e);
                   }}
-                  className="button"
-                  style={{ backgroundColor: "orange" }}
+                  className="accommodation-button"
                 >
                   Book Your Accommodation <br />
                 </Link>
@@ -383,7 +374,7 @@ const Home = (props) => {
                 <div className={`modal-content${DarkMode ? "-dark" : ""}`}>
                   <p>
                     Student hostel rooms are only available for booking
-                    currently. Click OK to proceed. Otherwise, wait for the
+                    currently. Click Next to proceed. Otherwise, wait for the
                     organizing committee to open guest house rooms for bookings.
                     Your name has been added to the waiting list.
                   </p>
@@ -400,7 +391,7 @@ const Home = (props) => {
                       navigate("/accommodation");
                     }}
                   >
-                    OK
+                    Next <span className="next-icon">→</span>
                   </button>
                 </div>
               </div>
