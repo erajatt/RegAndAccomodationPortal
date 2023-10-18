@@ -17,7 +17,7 @@ const Accommodation = (props) => {
   const [isWaiting, setIsWaiting] = useState("false");
   const [isAssigned, setIsAssigned] = useState("false");
   const [accommodationChoice, setaccommodationChoice] = useState("");
-
+  const DarkMode = props.DarkMode;
   const [formData, setFormData] = useState({
     arrivalTime: "",
     departureTime: "",
@@ -195,8 +195,8 @@ const Accommodation = (props) => {
           style={{ marginBottom: "20px", opacity: 1 }}
         >
           {step === 1 && (
-            <div className="registrationContainer">
-              <h1>Accommodation</h1>
+            <div className={`registrationContainer${DarkMode ? "-dark" : ""}`}>
+              <h1 style={DarkMode ? { color: "white" } : {}}>Accommodation</h1>
               <p style={{ color: "red", textAlign: "right" }}>
                 * -&gt; required fields
               </p>
@@ -210,6 +210,11 @@ const Accommodation = (props) => {
                     name="accommodationChoice"
                     value={formData.accommodationChoice}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -250,6 +255,11 @@ const Accommodation = (props) => {
                     name="arrivalTime"
                     value={formData.arrivalTime}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -270,6 +280,11 @@ const Accommodation = (props) => {
                     name="departureTime"
                     value={formData.departureTime}
                     onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
                     required
                   >
                     <option value="">Select</option>
@@ -289,7 +304,7 @@ const Accommodation = (props) => {
           )}
           {step === 2 && (
             <div
-              className="registrationContainer"
+              className={`registrationContainer${DarkMode ? "-dark" : ""}`}
               style={{ marginBottom: "20px" }}
             >
               {!accommodationSuccess && (
@@ -338,6 +353,7 @@ const Accommodation = (props) => {
                       payment receipt.
                     </label>
                     <input
+                      className={`${DarkMode ? "input-dark" : ""}`}
                       type="file"
                       id="accommodationPaymentReceipt"
                       name="accommodationPaymentReceipt"
@@ -369,6 +385,7 @@ const Accommodation = (props) => {
                     </label>
                     <input
                       type="text"
+                      className={`${DarkMode ? "input-dark" : ""}`}
                       id="accommodationPaymentReferenceNumber"
                       name="accommodationPaymentReferenceNumber"
                       value={formData.accommodationPaymentReferenceNumber}
