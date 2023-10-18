@@ -139,11 +139,11 @@ h3 {
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: #fff7c9;
   margin: 20% auto;
   padding: 20px;
-  max-width: 400px;
-  text-align: center;
+  max-width: 450px;
+  text-align: left;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 

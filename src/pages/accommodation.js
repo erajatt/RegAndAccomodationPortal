@@ -117,6 +117,14 @@ const Accommodation = (props) => {
         return 4000;
       case "SHTPSDO":
         return 6600;
+      case "Makeshift guest rooms with attached washroom in hostels/quarters - 1000/- per day":
+        return 1000;
+      case "Guest House (Single room) - 1400/- per day":
+        return 1400;
+      case "Guest House (Double room with Double occupancy) - 2000/- per day":
+        return 2000;
+      case "Guest House (Double room with Single occupancy) - 1700/- per day":
+        return 1700;
       default:
         return 0;
     }
@@ -338,7 +346,7 @@ const Accommodation = (props) => {
                       required
                       style={{
                         margin: "auto",
-                        display: "block", // Ensure the input takes up full width
+                        display: "block",
                         width: "100%",
                       }}
                     />

@@ -37,11 +37,9 @@ function App() {
   );
 }
 
-// Define a separate component to use useLocation
 function AppContent(props) {
   const location = useLocation();
-  // Determine whether to show the logout button based on the route
-  const showButton = location.pathname === "/users";
+  const showButton = location.pathname === "/users"||location.pathname==="/accommodationWaitingList";
   const user = window.localStorage.userID;
   const isDarkMode = props.isDarkMode;
   const setIsDarkMode = props.setIsDarkMode;

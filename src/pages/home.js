@@ -140,7 +140,7 @@ const Home = (props) => {
 
   const handleAddToWaitingList = async (e) => {
     e.preventDefault();
-    setShowAccommodationModal(false);
+    
     try {
       const response = await axios.post(
         "https://regportal.onrender.com/accommodation/waiting-add",
@@ -150,6 +150,8 @@ const Home = (props) => {
         toast.success(
           "Successfully added to the waiting list for Guest House rooms"
         );
+        setIsWaiting(true);
+        setShowAccommodationModal(false);
     } catch (error) {
       toast.error(error);
     }
@@ -278,15 +280,16 @@ const Home = (props) => {
                   </p>
                 ) : (
                   <p>
-                    Congratulations! Your accommodation details have been
-                    verified.
+                    <strong>Congratulations! Your accommodation details have been
+                    verified.</strong>
                   </p>
                 )
               ) : isWaiting ? (
                 <p>
-                  Your name is on the Guest House waiting list. You'll receive
+                  <strong>Your name is on the Guest House waiting list. You'll receive
                   an email with your allotted accommodation soon. Thank you for
-                  your patience.
+                  your patience.</strong>
+                  
                 </p>
               ) : !accommodationFormFilled ? (
                 <Link
@@ -299,8 +302,9 @@ const Home = (props) => {
                 </Link>
               ) : accommodationVerified ? (
                 <p>
-                  Congratulations! Your accommodation details have been
-                  verified.
+                  <strong>Congratulations! Your accommodation details have been
+                  verified.</strong>
+                  
                 </p>
               ) : (
                 <p>
@@ -374,9 +378,9 @@ const Home = (props) => {
                 <div className={`modal-content${DarkMode ? "-dark" : ""}`}>
                   <p>
                     Student hostel rooms are only available for booking
-                    currently. Click Next to proceed. Otherwise, wait for the
+                    currently. <strong>Click Next to proceed</strong>.<br/><br/> Otherwise, wait for the
                     organizing committee to open guest house rooms for bookings.
-                    Your name has been added to the waiting list.
+                    Your name will be added to the waiting list.<br/><br/>
                   </p>
                   <button
                     onClick={(e) => {
