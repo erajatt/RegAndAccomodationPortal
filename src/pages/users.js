@@ -213,41 +213,6 @@ const Users = (props) => {
       );
   };
 
-  const handleDownloadReceipt = async (userID) => {
-    axios({
-      url: `https://regportal.onrender.com/admin/userPaymentFile`,
-      method: "POST",
-      responseType: "blob",
-      data: { userID: userID, token: cookieValue },
-    })
-      .then((response) => {
-        handleLoadingStateChange(userID, "downloadPaymentReciept", true);
-        const blobUrl = URL.createObjectURL(response.data);
-        const success = response.data.success;
-        if (success === "false") {
-          toast.warn(response.data.message);
-        } else {
-          const link = document.createElement("a");
-          link.href = blobUrl;
-          link.download = response.headers["content-disposition"].split("=")[1];
-          link.target = "_blank";
-
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          URL.revokeObjectURL(blobUrl);
-        }
-      })
-      .catch((error) => {
-        console.error("Error downloading file:", error);
-        toast.warn("File Not Found");
-      })
-      .finally(() =>
-        handleLoadingStateChange(userID, "downloadPaymentReciept", false)
-      );
-  };
-
   const handleDownloadUserData = async (userID) => {
     axios({
       url: `https://regportal.onrender.com/admin/userFormDetail`,
@@ -424,6 +389,76 @@ const Users = (props) => {
       .finally(() => setLoadingPf(false));
   };
 
+  const handleDownloadReceipt = async (userID) => {
+    axios({
+      url: `https://regportal.onrender.com/admin/userPaymentFile`,
+      method: "POST",
+      responseType: "blob",
+      data: { userID: userID, token: cookieValue },
+    })
+      .then((response) => {
+        handleLoadingStateChange(userID, "downloadPaymentReciept", true);
+        const blobUrl = URL.createObjectURL(response.data);
+        const success = response.data.success;
+        if (success === "false") {
+          toast.warn(response.data.message);
+        } else {
+          const link = document.createElement("a");
+          link.href = blobUrl;
+          link.download = response.headers["content-disposition"].split("=")[1];
+          link.target = "_blank";
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          URL.revokeObjectURL(blobUrl);
+        }
+      })
+      .catch((error) => {
+        console.error("Error downloading file:", error);
+        toast.warn("File Not Found");
+      })
+      .finally(() =>
+        handleLoadingStateChange(userID, "downloadPaymentReciept", false)
+      );
+  };
+
+  const handleDownloadAccommodationReceipt = async (userID) => {
+    axios({
+      url: `https://regportal.onrender.com/admin/userAccommodationPaymentFile`,
+      method: "POST",
+      responseType: "blob",
+      data: { userID: userID, token: cookieValue },
+    })
+      .then((response) => {
+        handleLoadingStateChange(userID, "downloadAccommodationReciept", true);
+        const blobUrl = URL.createObjectURL(response.data);
+        const success = response.data.success;
+        if (success === "false") {
+          toast.warn(response.data.message);
+        } else {
+          const link = document.createElement("a");
+          link.href = blobUrl;
+          link.download = response.headers["content-disposition"].split("=")[1];
+          link.target = "_blank";
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          URL.revokeObjectURL(blobUrl);
+        }
+      })
+      .catch((error) => {
+        console.error("Error downloading file:", error);
+        toast.warn("File Not Found");
+      })
+      .finally(() =>
+        handleLoadingStateChange(userID, "downloadAccommodationReciept", false)
+      );
+  };
+
   const [loadingStates, setLoadingStates] = useState({});
 
   const handleLoadingStateChange = (userId, action, isLoading) => {
@@ -435,7 +470,7 @@ const Users = (props) => {
       },
     }));
   };
-  
+
   return (
     isAdmin && (
       <div className={`userscontainer${DarkMode ? "-dark" : ""}`}>
@@ -519,11 +554,12 @@ const Users = (props) => {
           <table>
             <thead>
               <tr>
-                <th>Verify Registration</th>
                 <th>Email</th>
+                <th>Verify Registration</th>
                 <th>Verify Accommodation</th>
+                <th>Registration Receipt</th>
+                <th>Accommodation Receipt</th>
                 <th>ISHMT ID</th>
-                <th>Payment Receipt</th>
                 <th>User Data</th>
                 <th>Delete</th>
               </tr>
@@ -532,6 +568,7 @@ const Users = (props) => {
               {searchInput !== "" &&
                 filteredUsers.map((user) => (
                   <tr key={user._id}>
+                    <td>{user.userEmail}</td>
                     <td>
                       <input
                         type="checkbox"
@@ -543,7 +580,7 @@ const Users = (props) => {
                         disabled={user.isVerified}
                       />
                     </td>
-                    <td>{user.userEmail}</td>
+
                     <td>
                       {user.accommodationFormFilled ? (
                         <input
@@ -562,32 +599,6 @@ const Users = (props) => {
 
                     <td>
                       <button
-                        className="download1-button"
-                        disabled={loadingStates[user._id]?.downloadISHMTID}
-                        onClick={() => {
-                          handleLoadingStateChange(
-                            user._id,
-                            "downloadISHMTID",
-                            true
-                          );
-                          handleDownloadISHMTID(user._id);
-                        }}
-                      >
-                        {loadingStates[user._id]?.downloadISHMTID ? (
-                          <Loading
-                            color={"#fff"}
-                            height={"40%"}
-                            width={"40%"}
-                            divHeight={"25px"}
-                            divWidth={"75px"}
-                          />
-                        ) : (
-                          "Download"
-                        )}
-                      </button>
-                    </td>
-                    <td>
-                      <button
                         className="download-button"
                         onClick={() => {
                           handleLoadingStateChange(
@@ -603,6 +614,65 @@ const Users = (props) => {
                       >
                         {" "}
                         {loadingStates[user._id]?.downloadPaymentReciept ? (
+                          <Loading
+                            color={"#fff"}
+                            height={"40%"}
+                            width={"40%"}
+                            divHeight={"25px"}
+                            divWidth={"75px"}
+                          />
+                        ) : (
+                          "Download"
+                        )}
+                      </button>
+                    </td>
+                    <td>
+                      {user.accommodationFormFilled ? (
+                        <button
+                          className="download-button"
+                          onClick={() => {
+                            handleLoadingStateChange(
+                              user._id,
+                              "downloadAccommodationReciept",
+                              true
+                            );
+                            handleDownloadAccommodationReceipt(user._id);
+                          }}
+                          disabled={
+                            loadingStates[user._id]
+                              ?.downloadAccommodationReciept
+                          }
+                        >
+                          {" "}
+                          {loadingStates[user._id]
+                            ?.downloadAccommodationReciept ? (
+                            <Loading
+                              color={"#fff"}
+                              height={"40%"}
+                              width={"40%"}
+                              divHeight={"25px"}
+                              divWidth={"75px"}
+                            />
+                          ) : (
+                            "Download"
+                          )}
+                        </button>
+                      ) : null}
+                    </td>
+                    <td>
+                      <button
+                        className="download1-button"
+                        disabled={loadingStates[user._id]?.downloadISHMTID}
+                        onClick={() => {
+                          handleLoadingStateChange(
+                            user._id,
+                            "downloadISHMTID",
+                            true
+                          );
+                          handleDownloadISHMTID(user._id);
+                        }}
+                      >
+                        {loadingStates[user._id]?.downloadISHMTID ? (
                           <Loading
                             color={"#fff"}
                             height={"40%"}
@@ -636,6 +706,7 @@ const Users = (props) => {
               {searchInput === "" &&
                 users.map((user) => (
                   <tr key={user._id}>
+                    <td>{user.userEmail}</td>
                     <td>
                       <input
                         type="checkbox"
@@ -647,7 +718,7 @@ const Users = (props) => {
                         disabled={user.isVerified}
                       />
                     </td>
-                    <td>{user.userEmail}</td>
+
                     <td>
                       {user.accommodationFormFilled ? (
                         <input
@@ -666,32 +737,6 @@ const Users = (props) => {
 
                     <td>
                       <button
-                        className="download1-button"
-                        disabled={loadingStates[user._id]?.downloadISHMTID}
-                        onClick={() => {
-                          handleLoadingStateChange(
-                            user._id,
-                            "downloadISHMTID",
-                            true
-                          );
-                          handleDownloadISHMTID(user._id);
-                        }}
-                      >
-                        {loadingStates[user._id]?.downloadISHMTID ? (
-                          <Loading
-                            color={"#fff"}
-                            height={"40%"}
-                            width={"40%"}
-                            divHeight={"25px"}
-                            divWidth={"75px"}
-                          />
-                        ) : (
-                          "Download"
-                        )}
-                      </button>
-                    </td>
-                    <td>
-                      <button
                         className="download-button"
                         onClick={() => {
                           handleLoadingStateChange(
@@ -707,6 +752,65 @@ const Users = (props) => {
                       >
                         {" "}
                         {loadingStates[user._id]?.downloadPaymentReciept ? (
+                          <Loading
+                            color={"#fff"}
+                            height={"40%"}
+                            width={"40%"}
+                            divHeight={"25px"}
+                            divWidth={"75px"}
+                          />
+                        ) : (
+                          "Download"
+                        )}
+                      </button>
+                    </td>
+                    <td>
+                      {user.accommodationFormFilled ? (
+                        <button
+                          className="download-button"
+                          onClick={() => {
+                            handleLoadingStateChange(
+                              user._id,
+                              "downloadAccommodationReciept",
+                              true
+                            );
+                            handleDownloadAccommodationReceipt(user._id);
+                          }}
+                          disabled={
+                            loadingStates[user._id]
+                              ?.downloadAccommodationReciept
+                          }
+                        >
+                          {" "}
+                          {loadingStates[user._id]
+                            ?.downloadAccommodationReciept ? (
+                            <Loading
+                              color={"#fff"}
+                              height={"40%"}
+                              width={"40%"}
+                              divHeight={"25px"}
+                              divWidth={"75px"}
+                            />
+                          ) : (
+                            "Download"
+                          )}
+                        </button>
+                      ) : null}
+                    </td>
+                    <td>
+                      <button
+                        className="download1-button"
+                        disabled={loadingStates[user._id]?.downloadISHMTID}
+                        onClick={() => {
+                          handleLoadingStateChange(
+                            user._id,
+                            "downloadISHMTID",
+                            true
+                          );
+                          handleDownloadISHMTID(user._id);
+                        }}
+                      >
+                        {loadingStates[user._id]?.downloadISHMTID ? (
                           <Loading
                             color={"#fff"}
                             height={"40%"}
