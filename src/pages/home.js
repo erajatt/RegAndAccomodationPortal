@@ -127,12 +127,13 @@ const Home = (props) => {
         "Thanks for registering! Kindly wait for the organizing committee to verify the payment against your registration, after which you will be able to proceed further."
       );
     } else if (!isStudent) {
-      if (isAssigned) {
-        navigate("/accommodation");
-      } else {
-        // console.log("clicked");
-        setShowAccommodationModal(true);
-      }
+      toast.info("Coming Soon!");
+      // if (isAssigned) {
+      //   navigate("/accommodation");
+      // } else {
+      //   // console.log("clicked");
+      //   setShowAccommodationModal(true);
+      // }
     } else {
       navigate("/accommodation");
     }
@@ -140,7 +141,7 @@ const Home = (props) => {
 
   const handleAddToWaitingList = async (e) => {
     e.preventDefault();
-    
+
     try {
       const response = await axios.post(
         "https://regportal.onrender.com/accommodation/waiting-add",
@@ -150,8 +151,8 @@ const Home = (props) => {
         toast.success(
           "Successfully added to the waiting list for Guest House rooms"
         );
-        setIsWaiting(true);
-        setShowAccommodationModal(false);
+      setIsWaiting(true);
+      setShowAccommodationModal(false);
     } catch (error) {
       toast.error(error);
     }
@@ -255,58 +256,18 @@ const Home = (props) => {
             </>
           )}
           <div>
-            {
-              isStudent ? (
-                !accommodationFormFilled ? (
-                  <Link
-                    onClick={(e) => {
-                      handleAccommodationButtonClick(e);
-                    }}
-                    className="button"
-                    style={{ backgroundColor: "orange" }}
-                  >
-                    Book Your Accommodation <br />
-                  </Link>
-                ) : !accommodationVerified ? (
-                  <p>
-                    <strong>
-                      Thank you for filling the accommodation form. <br /> Your
-                      accommodation details are currently under verification.
-                      <br /> You will receive an email when your details are
-                      verified.
-                      <br />
-                      <br />
-                    </strong>
-                  </p>
-                ) : (
-                  <p>
-                    <strong>Congratulations! Your accommodation details have been
-                    verified.</strong>
-                  </p>
-                )
-              ) : isWaiting ? (
-                <p>
-                  <strong>Your name is on the Guest House waiting list. You'll receive
-                  an email with your allotted accommodation soon. Thank you for
-                  your patience.</strong>
-                  
-                </p>
-              ) : !accommodationFormFilled ? (
+            {isStudent ? (
+              !accommodationFormFilled ? (
                 <Link
                   onClick={(e) => {
                     handleAccommodationButtonClick(e);
                   }}
-                  className="accommodation-button"
+                  className="button"
+                  style={{ backgroundColor: "orange" }}
                 >
                   Book Your Accommodation <br />
                 </Link>
-              ) : accommodationVerified ? (
-                <p>
-                  <strong>Congratulations! Your accommodation details have been
-                  verified.</strong>
-                  
-                </p>
-              ) : (
+              ) : !accommodationVerified ? (
                 <p>
                   <strong>
                     Thank you for filling the accommodation form. <br /> Your
@@ -317,31 +278,39 @@ const Home = (props) => {
                     <br />
                   </strong>
                 </p>
+              ) : (
+                <p>
+                  <strong>
+                    Congratulations! Your accommodation details have been
+                    verified.
+                  </strong>
+                </p>
               )
-
-              /* {
-            // (isStudent && !accommodationFormFilled) ||(!isStudent&&!isWaiting&&!accommodationFormFilled)
-            (!accommodationFormFilled && (isStudent || (!isWaiting && !isStudent)))
-             && (
+            ) : isWaiting ? (
+              <p>
+                <strong>
+                  Your name is on the Guest House waiting list. You'll receive
+                  an email with your allotted accommodation soon. Thank you for
+                  your patience.
+                </strong>
+              </p>
+            ) : !accommodationFormFilled ? (
               <Link
                 onClick={(e) => {
                   handleAccommodationButtonClick(e);
                 }}
-                className="button"
-                style={{ backgroundColor: "orange" }}
+                className="accommodation-button"
               >
                 Book Your Accommodation <br />
               </Link>
-            )} */
-            }
-            {/* {(isStudent && !accommodationFormFilled) ||(!isStudent&&!isWaiting&&!accommodationFormFilled) && (
-              <strong>
-                Your name is on the Guest House waiting list. You'll receive an
-                email with your allotted accommodation soon. Thank you for your
-                patience.
-              </strong>
-            )} */}
-            {/* {accommodationFormFilled && !accommodationVerified && (
+            ) : accommodationVerified ? (
+              <p>
+                <strong>
+                  Congratulations! Your accommodation details have been
+                  verified.
+                </strong>
+              </p>
+            ) : (
               <p>
                 <strong>
                   Thank you for filling the accommodation form. <br /> Your
@@ -352,20 +321,7 @@ const Home = (props) => {
                   <br />
                 </strong>
               </p>
-            )} */}
-            {/* {accommodationVerified && (
-              <p>
-                Congratulations! Your accommodation details have been verified.
-              </p>
-            )} */}
-
-            {/* {!isStudent&&isWaiting&&(
-              <p>
-                Your name is on the Guest House waiting list. You'll receive an
-              email with your allotted accommodation soon. Thank you for your
-              patience.
-              </p>
-            )} */}
+            )}
 
             {showAccommodationModal && (
               <div
@@ -378,16 +334,20 @@ const Home = (props) => {
                 <div className={`modal-content${DarkMode ? "-dark" : ""}`}>
                   <p>
                     Student hostel rooms are only available for booking
-                    currently. <strong>Click Next to proceed</strong>.<br/><br/> Otherwise, wait for the
-                    organizing committee to open guest house rooms for bookings.
-                    Your name will be added to the waiting list.<br/><br/>
+                    currently. <strong>Click Next to proceed</strong>.<br />
+                    <br /> Otherwise, wait for the organizing committee to open
+                    (a) Guest House Rooms, or (b) Makeshift Guest Rooms, for
+                    bookings. Your may add your name to the waiting list by
+                    clicking below.
+                    <br />
+                    <br />
                   </p>
                   <button
                     onClick={(e) => {
                       handleAddToWaitingList(e);
                     }}
                   >
-                    Wait for Guest house rooms
+                    Add me to the waiting list for Guest Rooms
                   </button>
                   <button
                     onClick={() => {

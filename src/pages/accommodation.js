@@ -14,8 +14,9 @@ const Accommodation = (props) => {
   const [isDeclarationChecked, setIsDeclarationChecked] = useState(false);
   const [accommodationSuccess, setAccommodationSuccess] = useState(false);
   const [accompanyingPersons, setAccompanyingPersons] = useState("");
-  const [isWaiting, setIsWaiting] = useState("false");
-  const [isAssigned, setIsAssigned] = useState("false");
+  const [isWaiting, setIsWaiting] = useState(false);
+  const [isAssigned, setIsAssigned] = useState(false);
+  const [isStudent, setIsStudent] = useState(false);
   const [accommodationChoice, setaccommodationChoice] = useState("");
   const DarkMode = props.DarkMode;
   const [formData, setFormData] = useState({
@@ -40,6 +41,7 @@ const Accommodation = (props) => {
           setAccompanyingPersons(response.data.accompanyingPersons);
           setIsWaiting(response.data.isWaiting);
           setIsAssigned(response.data.isAssigned);
+          setIsStudent(response.data.isStudent);
           console.log("first called", response.data);
           if (isAssigned) {
             try {
@@ -248,7 +250,7 @@ const Accommodation = (props) => {
                 </div>
                 <div className="form-group">
                   <label className="labelText" htmlFor="arrivalTime">
-                    Please choose your arrival time.
+                    Please choose your arrival date and time.
                   </label>
                   <select
                     id="arrivalTime"
@@ -269,11 +271,13 @@ const Accommodation = (props) => {
                     <option value="14th-dec-morning">
                       14th December, Morning
                     </option>
+
+                    
                   </select>
                 </div>
                 <div className="form-group">
                   <label className="labelText" htmlFor="departureTime">
-                    Please choose your departure time.
+                    Please choose your departure date and time.
                   </label>
                   <select
                     id="departureTime"
