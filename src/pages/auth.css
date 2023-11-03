@@ -1,4 +1,4 @@
-/* auth.css */
+
 .authWrapper {
   align-items: center;
   background-color: #e5e5e5;
@@ -91,10 +91,10 @@ button:disabled {
 
 .loginMode.active,
 .signinMode.active {
-  color: rgb(0, 0, 3); /* Set your desired color for active labels */
+  color: rgb(0, 0, 3);
 }
 
-/* styles.css */
+
 .forgot-password-link {
   text-decoration: none;
   color: #007bff;
@@ -114,14 +114,14 @@ button:disabled {
 
 .password-criteria-text {
   font-size: small;
-  color: #888; /* Dimmed color */
+  color: #888; 
 }
 
 .password-criteria-list {
   list-style: disc;
   margin-left: 20px;
   font-size: small;
-  color: #888; /* Dimmed color */
+  color: #888; 
 }
 
 .scroll {
@@ -146,7 +146,7 @@ button:disabled {
 
 .authWrapper-dark {
   align-items: center;
-  background-color: #333; /* Dark background */
+  background-color: #333; 
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -160,7 +160,7 @@ button:disabled {
 }
 
 .authCard-dark {
-  background-color: #444; /* Slightly lighter background color */
+  background-color: #444; 
   color: white;
   box-shadow: 5px 6px 6px rgb(0 0 0 / 10%);
   margin-bottom: 68px;
@@ -182,7 +182,7 @@ button:disabled {
 
 .loginMode-dark:hover,
 .signinMode-dark:hover {
-  color: #fff; /* Light text color on hover */
+  color: #fff; 
 }
 
 .authForm-dark {
@@ -194,7 +194,7 @@ button:disabled {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #fff; /* Light text color */
+  color: #fff; 
 }
 
 .input-dark {
@@ -202,14 +202,14 @@ button:disabled {
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
-  background-color: #555; /* Dark input background */
-  color: #fff; /* Light text color */
+  background-color: #555; 
+  color: #fff; 
 }
 
 
 .loginMode-dark.active,
 .signinMode-dark.active {
-  color: #ffffff; /* Set your desired color for active labels */
+  color: #ffffff; 
 }
 
-/* styles.css */
+

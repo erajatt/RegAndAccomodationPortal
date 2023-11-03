@@ -434,7 +434,7 @@ const Accommodation = (props) => {
                 {accommodationSuccess && (
                   <div className="success-message">
                     <p className="success-text">
-                      Accommodation successful! You can now{" "}
+                      Accommodation form submitted successfully! You can now{" "}
                       <Link to="/home" className="return-link">
                         return to the homepage
                       </Link>

@@ -15,6 +15,7 @@ const Users = (props) => {
   const [loadingEx, setLoadingEx] = useState(false);
   const [loadingPf, setLoadingPf] = useState(false);
   const [loadingIf, setLoadingIf] = useState(false);
+  const [loadingAf, setLoadingAf] = useState(false);
   const [loading, setLoading] = useState(false);
   const DarkMode = props.DarkMode;
 
@@ -63,7 +64,7 @@ const Users = (props) => {
   const handleDeleteUser = async (userID) => {
     try {
       const response = await axios.delete(
-        `https://regportal.onrender.com/admin/delete`,
+        `https://regportal.onrender.com/admin/userDelete`,
         {
           data: { userID: userID, token: cookieValue },
         }
@@ -76,6 +77,29 @@ const Users = (props) => {
       }
     } catch (error) {
       toast.error("Failed to delete the user. Please try again.");
+    }
+  };
+
+  const handleDeleteUserAccommodation = async (userID) => {
+    try {
+      const response = await axios.delete(
+        `https://regportal.onrender.com/admin/userAccommodationDelete`,
+        {
+          data: { userID: userID, token: cookieValue },
+        }
+      );
+      if (response.data.success === "true") {
+        toast.success("User's accommodation deleted succesfully!");
+        setUsers(response.data.list);
+      } else {
+        toast.error(
+          "Failed to delete the user's accommodation. Please try again."
+        );
+      }
+    } catch (error) {
+      toast.error(
+        "Failed to delete the user's accommodation. Please try again."
+      );
     }
   };
 
@@ -389,6 +413,33 @@ const Users = (props) => {
       .finally(() => setLoadingPf(false));
   };
 
+  const downloadAllAccommodationReceipts = async () => {
+    axios({
+      url: `https://regportal.onrender.com/admin/accommodationPaymentFiles`,
+      method: "POST",
+      responseType: "blob",
+      data: { token: cookieValue },
+    })
+      .then((response) => {
+        setLoadingAf(true);
+        const blobUrl = URL.createObjectURL(response.data);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = response.headers["content-disposition"].split("=")[1];
+        link.target = "_blank";
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(blobUrl);
+      })
+      .catch((error) => {
+        toast.error("Error downloading files", error);
+      })
+      .finally(() => setLoadingAf(false));
+  };
+
   const handleDownloadReceipt = async (userID) => {
     axios({
       url: `https://regportal.onrender.com/admin/userPaymentFile`,
@@ -476,16 +527,68 @@ const Users = (props) => {
       <div className={`userscontainer${DarkMode ? "-dark" : ""}`}>
         <h2>User Management</h2>
         <div className={`user-count${DarkMode ? "-dark" : ""}`}>
-          {searchInput === "" && `Total Registered Users: ${users.length}`}
-          {searchInput !== "" &&
-            `Total Registered Users: ${filteredUsers.length}`}
+          {searchInput === ""
+            ? `Number of users registered (pending verification): ${
+                users.filter((user) => !user.isVerified).length
+              }`
+            : `Number of users registered (pending verification): ${
+                filteredUsers.filter((user) => !user.isVerified).length
+              }`}
         </div>
+        <div className={`user-count${DarkMode ? "-dark" : ""}`}>
+          {searchInput === ""
+            ? `Number of users registered (verified): ${
+                users.filter((user) => user.isVerified).length
+              }`
+            : `Number of users registered (verified): ${
+                filteredUsers.filter((user) => user.isVerified).length
+              }`}
+        </div>
+        <div className={`user-count${DarkMode ? "-dark" : ""}`}>
+          {searchInput === ""
+            ? `Number of users filled accommodation form (pending verification):
+            ${
+              users.filter(
+                (user) =>
+                  user.accommodationFormFilled && !user.accommodationVerified
+              ).length
+            }`
+            : `Number of users filled accommodation form (pending verification):
+            ${
+              filteredUsers.filter(
+                (user) =>
+                  user.accommodationFormFilled && !user.accommodationVerified
+              ).length
+            }`}
+        </div>
+        <div className={`user-count${DarkMode ? "-dark" : ""}`}>
+          {searchInput === ""
+            ? `Number of users accommodation confirmed: ${
+                users.filter((user) => user.accommodationVerified).length
+              }`
+            : `Number of users accommodation confirmed: ${
+                filteredUsers.filter((user) => user.accomoodationVerified)
+                  .length
+              }`}
+        </div>
+
         <input
           type="text"
           placeholder="Search by Email"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
+          style={{
+            padding: "10px",
+            fontSize: "16px",
+            border: DarkMode ? "1px solid #333" : "1px solid #ccc",
+            borderRadius: "5px",
+            width: "100%",
+            margin: "20px",
+            color: DarkMode ? "#fff" : "#000",
+            backgroundColor: DarkMode ? "black" : "#fff",
+          }}
         />
+
         <div style={{ display: "flex", flexDirection: "row" }}>
           <button
             className="download-all-button"
@@ -546,7 +649,27 @@ const Users = (props) => {
                 divWidth={"128px"}
               />
             ) : (
-              "Download All Payment Receipts (ZIP)"
+              "Download All Registration Payment Receipts (ZIP)"
+            )}
+          </button>
+          <button
+            className="download-all-button"
+            disabled={loadingAf}
+            onClick={() => {
+              setLoadingAf(true);
+              downloadAllAccommodationReceipts();
+            }}
+          >
+            {loadingAf ? (
+              <Loading
+                color={"#fff"}
+                height={"20%"}
+                width={"20%"}
+                divHeight={"20px"}
+                divWidth={"128px"}
+              />
+            ) : (
+              "Download All Accommodation Payment Receipts (ZIP)"
             )}
           </button>
         </div>
@@ -557,11 +680,12 @@ const Users = (props) => {
                 <th>Email</th>
                 <th>Verify Registration</th>
                 <th>Verify Accommodation</th>
-                <th>Registration Receipt</th>
                 <th>Accommodation Receipt</th>
+                <th>Registration Receipt</th>
                 <th>ISHMT ID</th>
                 <th>User Data</th>
-                <th>Delete</th>
+                <th>Delete User Accommodation</th>
+                <th>Delete User</th>
               </tr>
             </thead>
             <tbody>
@@ -598,35 +722,6 @@ const Users = (props) => {
                     </td>
 
                     <td>
-                      <button
-                        className="download-button"
-                        onClick={() => {
-                          handleLoadingStateChange(
-                            user._id,
-                            "downloadPaymentReciept",
-                            true
-                          );
-                          handleDownloadReceipt(user._id);
-                        }}
-                        disabled={
-                          loadingStates[user._id]?.downloadPaymentReciept
-                        }
-                      >
-                        {" "}
-                        {loadingStates[user._id]?.downloadPaymentReciept ? (
-                          <Loading
-                            color={"#fff"}
-                            height={"40%"}
-                            width={"40%"}
-                            divHeight={"25px"}
-                            divWidth={"75px"}
-                          />
-                        ) : (
-                          "Download"
-                        )}
-                      </button>
-                    </td>
-                    <td>
                       {user.accommodationFormFilled ? (
                         <button
                           className="download-button"
@@ -659,6 +754,37 @@ const Users = (props) => {
                         </button>
                       ) : null}
                     </td>
+
+                    <td>
+                      <button
+                        className="download-button"
+                        onClick={() => {
+                          handleLoadingStateChange(
+                            user._id,
+                            "downloadPaymentReciept",
+                            true
+                          );
+                          handleDownloadReceipt(user._id);
+                        }}
+                        disabled={
+                          loadingStates[user._id]?.downloadPaymentReciept
+                        }
+                      >
+                        {" "}
+                        {loadingStates[user._id]?.downloadPaymentReciept ? (
+                          <Loading
+                            color={"#fff"}
+                            height={"40%"}
+                            width={"40%"}
+                            divHeight={"25px"}
+                            divWidth={"75px"}
+                          />
+                        ) : (
+                          "Download"
+                        )}
+                      </button>
+                    </td>
+
                     <td>
                       <button
                         className="download1-button"
@@ -691,6 +817,14 @@ const Users = (props) => {
                         onClick={() => handleDownloadUserData(user._id)}
                       >
                         View
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDeleteUserAccommodation(user._id)}
+                      >
+                        Delete
                       </button>
                     </td>
                     <td>
@@ -734,36 +868,6 @@ const Users = (props) => {
                         />
                       ) : null}
                     </td>
-
-                    <td>
-                      <button
-                        className="download-button"
-                        onClick={() => {
-                          handleLoadingStateChange(
-                            user._id,
-                            "downloadPaymentReciept",
-                            true
-                          );
-                          handleDownloadReceipt(user._id);
-                        }}
-                        disabled={
-                          loadingStates[user._id]?.downloadPaymentReciept
-                        }
-                      >
-                        {" "}
-                        {loadingStates[user._id]?.downloadPaymentReciept ? (
-                          <Loading
-                            color={"#fff"}
-                            height={"40%"}
-                            width={"40%"}
-                            divHeight={"25px"}
-                            divWidth={"75px"}
-                          />
-                        ) : (
-                          "Download"
-                        )}
-                      </button>
-                    </td>
                     <td>
                       {user.accommodationFormFilled ? (
                         <button
@@ -799,6 +903,36 @@ const Users = (props) => {
                     </td>
                     <td>
                       <button
+                        className="download-button"
+                        onClick={() => {
+                          handleLoadingStateChange(
+                            user._id,
+                            "downloadPaymentReciept",
+                            true
+                          );
+                          handleDownloadReceipt(user._id);
+                        }}
+                        disabled={
+                          loadingStates[user._id]?.downloadPaymentReciept
+                        }
+                      >
+                        {" "}
+                        {loadingStates[user._id]?.downloadPaymentReciept ? (
+                          <Loading
+                            color={"#fff"}
+                            height={"40%"}
+                            width={"40%"}
+                            divHeight={"25px"}
+                            divWidth={"75px"}
+                          />
+                        ) : (
+                          "Download"
+                        )}
+                      </button>
+                    </td>
+
+                    <td>
+                      <button
                         className="download1-button"
                         disabled={loadingStates[user._id]?.downloadISHMTID}
                         onClick={() => {
@@ -829,6 +963,14 @@ const Users = (props) => {
                         onClick={() => handleDownloadUserData(user._id)}
                       >
                         View
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDeleteUserAccommodation(user._id)}
+                      >
+                        Delete
                       </button>
                     </td>
                     <td>

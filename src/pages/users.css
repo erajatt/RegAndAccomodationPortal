@@ -30,6 +30,14 @@
   box-shadow: 5px 6px 6px rgb(0 0 0 / 10%);
 }
 
+.search-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 10px;
+}
 
 .userscontainer h2 {
   font-size: 28px;
@@ -44,12 +52,13 @@ table {
   border: 1px solid #ccc;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   text-align: center;
   border-bottom: 1px solid #ccc;
 }
-input:disabled{
+input:disabled {
   cursor: not-allowed;
 }
 
@@ -108,9 +117,8 @@ th {
 /* ... (existing CSS code) */
 
 .userscontainer .download-all-button {
-  margin:10px;
+  margin: 10px;
   background-color: #17a2b8;
-
 }
 
 .userscontainer .download-all-button:hover {
@@ -121,7 +129,7 @@ th {
   cursor: pointer;
 }
 
-button:disabled{
+button:disabled {
   opacity: 50%;
   cursor: not-allowed;
 }
@@ -233,8 +241,8 @@ button:disabled{
   color: #ffffff;
 }
 
-.userscontainer-dark th{
+.userscontainer-dark th {
   background-color: #333; /* Dark background color for th */
   font-weight: bold;
-  color: #fff; 
+  color: #fff;
 }
