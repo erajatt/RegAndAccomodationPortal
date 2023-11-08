@@ -335,7 +335,7 @@ const Accommodation = (props) => {
                     <br />
                     <br />
                     <a
-                      href="https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=1968961&categoryName=IHMTC-2023"
+                      href="https://www.onlinesbi.sbi/sbicollect/icollecthome.htm?corpID=1968961&categoryName=IHMTC2023ACCOMMODATION%20"
                       target="_blank" // Opens the link in a new tab
                       rel="noopener noreferrer" // Recommended for security when using target="_blank"
                       className="payment-link-button"
