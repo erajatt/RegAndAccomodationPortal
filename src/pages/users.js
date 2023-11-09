@@ -62,44 +62,54 @@ const Users = (props) => {
   };
 
   const handleDeleteUser = async (userID) => {
-    try {
-      const response = await axios.delete(
-        `https://regportal.onrender.com/admin/userDelete`,
-        {
-          data: { userID: userID, token: cookieValue },
+    const confirmed = window.confirm(
+      "Do you want to delete the user's profile from the database?"
+    );
+    if (confirmed) {
+      try {
+        const response = await axios.delete(
+          `https://regportal.onrender.com/admin/userDelete`,
+          {
+            data: { userID: userID, token: cookieValue },
+          }
+        );
+        if (response.data.success === "true") {
+          toast.success("User deleted succesfully!");
+          setUsers(response.data.list);
+        } else {
+          toast.error("Failed to delete the user. Please try again.");
         }
-      );
-      if (response.data.success === "true") {
-        toast.success("User deleted succesfully!");
-        setUsers(response.data.list);
-      } else {
+      } catch (error) {
         toast.error("Failed to delete the user. Please try again.");
       }
-    } catch (error) {
-      toast.error("Failed to delete the user. Please try again.");
     }
   };
 
   const handleDeleteUserAccommodation = async (userID) => {
-    try {
-      const response = await axios.delete(
-        `https://regportal.onrender.com/admin/userAccommodationDelete`,
-        {
-          data: { userID: userID, token: cookieValue },
+    const confirmed = window.confirm(
+      "Do you want to delete the user's accomodation details from the database?"
+    );
+    if (confirmed) {
+      try {
+        const response = await axios.delete(
+          `https://regportal.onrender.com/admin/userAccommodationDelete`,
+          {
+            data: { userID: userID, token: cookieValue },
+          }
+        );
+        if (response.data.success === "true") {
+          toast.success("User's accommodation deleted succesfully!");
+          setUsers(response.data.list);
+        } else {
+          toast.error(
+            "Failed to delete the user's accommodation. Please try again."
+          );
         }
-      );
-      if (response.data.success === "true") {
-        toast.success("User's accommodation deleted succesfully!");
-        setUsers(response.data.list);
-      } else {
+      } catch (error) {
         toast.error(
           "Failed to delete the user's accommodation. Please try again."
         );
       }
-    } catch (error) {
-      toast.error(
-        "Failed to delete the user's accommodation. Please try again."
-      );
     }
   };
 
@@ -821,7 +831,7 @@ const Users = (props) => {
                     </td>
                     <td>
                       <button
-                        className="delete-button"
+                        className="delete-button-1"
                         onClick={() => handleDeleteUserAccommodation(user._id)}
                       >
                         Delete
@@ -967,7 +977,7 @@ const Users = (props) => {
                     </td>
                     <td>
                       <button
-                        className="delete-button"
+                        className="delete-button-1"
                         onClick={() => handleDeleteUserAccommodation(user._id)}
                       >
                         Delete

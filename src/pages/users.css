@@ -90,6 +90,14 @@ th {
   background-color: #c82333;
 }
 
+.userscontainer .delete-button-1 {
+  background-color: #ff6b2c;
+}
+
+.userscontainer .delete-button-1:hover {
+  background-color: #883c1c;
+}
+
 .userscontainer .download-button {
   background-color: #28a745;
 }

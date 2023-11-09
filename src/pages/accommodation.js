@@ -19,6 +19,8 @@ const Accommodation = (props) => {
   const [isStudent, setIsStudent] = useState(false);
   const [accommodationChoice, setaccommodationChoice] = useState("");
   const DarkMode = props.DarkMode;
+  const [other1, setOther1] = useState(false);
+  const [other2, setOther2] = useState(false);
   const [formData, setFormData] = useState({
     arrivalTime: "",
     departureTime: "",
@@ -135,6 +137,7 @@ const Accommodation = (props) => {
   const handleSubmit2 = async (e) => {
     e.preventDefault();
     console.log("Submitted");
+    // console.log(formData);
     try {
       setLoading(true);
       const response = await axios.post(
@@ -156,6 +159,22 @@ const Accommodation = (props) => {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSelectChange1 = (event) => {
+    const selectedValue = event.target.value;
+    setOther1(selectedValue === "other");
+    if (selectedValue === "other") {
+      formData.arrivalTime = "";
+    }
+  };
+
+  const handleSelectChange2 = (event) => {
+    const selectedValue = event.target.value;
+    setOther2(selectedValue === "other");
+    if (selectedValue === "other") {
+      formData.departureTime = "";
     }
   };
 
@@ -248,58 +267,135 @@ const Accommodation = (props) => {
                     )}
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="labelText" htmlFor="arrivalTime">
-                    Please choose your arrival date and time.
-                  </label>
-                  <select
-                    id="arrivalTime"
-                    name="arrivalTime"
-                    value={formData.arrivalTime}
-                    onChange={handleChange}
-                    style={
-                      DarkMode
-                        ? { backgroundColor: "#555", color: "white" }
-                        : {}
-                    }
-                    required
-                  >
-                    <option value="">Select</option>
-                    <option value="13th-dec-afternoon/evening">
-                      13th December, Afternoon/Evening
-                    </option>
-                    <option value="14th-dec-morning">
-                      14th December, Morning
-                    </option>
 
-                    
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="labelText" htmlFor="departureTime">
-                    Please choose your departure date and time.
-                  </label>
-                  <select
-                    id="departureTime"
-                    name="departureTime"
-                    value={formData.departureTime}
-                    onChange={handleChange}
-                    style={
-                      DarkMode
-                        ? { backgroundColor: "#555", color: "white" }
-                        : {}
-                    }
-                    required
-                  >
-                    <option value="">Select</option>
-                    <option value="17th-dec-afternoon/evening">
-                      17th December, Afternoon/Evening
-                    </option>
-                    <option value="18th-dec-morning">
-                      18th December, Morning
-                    </option>
-                  </select>
-                </div>
+                {!other1 && (
+                  <div className="form-group">
+                    <label className="labelText" htmlFor="arrivalTime">
+                      Please choose your arrival date and time.
+                    </label>
+                    <select
+                      id="arrivalTime"
+                      name="arrivalTime"
+                      value={formData.arrivalTime}
+                      onChange={async (e) => {
+                        handleChange(e);
+                        handleSelectChange1(e);
+                      }}
+                      style={
+                        DarkMode
+                          ? { backgroundColor: "#555", color: "white" }
+                          : {}
+                      }
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="13th-dec-afternoon/evening">
+                        13th December, Afternoon/Evening
+                      </option>
+                      <option value="14th-dec-morning">
+                        14th December, Morning
+                      </option>
+                      {isStudent && <option value="other">Other</option>}
+                    </select>
+                  </div>
+                )}
+                {other1 && (
+                  <div className="form-group">
+                    <label className="labelText2" htmlFor="Comment">
+                      Determine your arrival time:
+                      <button
+                        style={{
+                          fontSize: "8px",
+                          padding: "5px",
+                          marginLeft: "40vh",
+                        }}
+                        onClick={handleSelectChange1}
+                      >
+                        Back
+                      </button>
+                    </label>
+                    <textarea
+                      id="comment"
+                      name="arrivalTime"
+                      value={formData.arrivalTime}
+                      onChange={handleChange}
+                      placeholder="14th December, Morning/Afternoon/Evening"
+                      rows={5}
+                      style={{
+                        width: "100%",
+                        resize: "vertical",
+                        border: "1px solid black", // Add the border style
+                        padding: "5px",
+                        backgroundColor: DarkMode ? "#555" : "white",
+                        color: DarkMode ? "white" : "black",
+                      }}
+                    />
+                  </div>
+                )}
+                {!other2 && (
+                  <div className="form-group">
+                    <label className="labelText" htmlFor="departureTime">
+                      Please choose your departure date and time.
+                    </label>
+                    <select
+                      id="departureTime"
+                      name="departureTime"
+                      value={formData.departureTime}
+                      onChange={async (e) => {
+                        handleChange(e);
+                        handleSelectChange2(e);
+                      }}
+                      style={
+                        DarkMode
+                          ? { backgroundColor: "#555", color: "white" }
+                          : {}
+                      }
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="17th-dec-afternoon/evening">
+                        17th December, Afternoon/Evening
+                      </option>
+                      <option value="18th-dec-morning">
+                        18th December, Morning
+                      </option>
+                      {isStudent && <option value="other">Other</option>}
+                    </select>
+                  </div>
+                )}
+                {other2 && (
+                  <div className="form-group">
+                    <label className="labelText2" htmlFor="Comment">
+                      Determine your departure time:
+                      <button
+                        style={{
+                          fontSize: "8px",
+                          padding: "5px",
+                          marginLeft: "37vh",
+                        }}
+                        onClick={handleSelectChange2}
+                      >
+                        Back
+                      </button>
+                    </label>
+                    <textarea
+                      id="comment"
+                      placeholder="18th December, Morning/Afternoon/Evening"
+                      name="departureTime"
+                      value={formData.departureTime}
+                      onChange={handleChange}
+                      rows={5}
+                      style={{
+                        width: "100%",
+                        resize: "vertical",
+                        border: "1px solid black", // Add the border style
+                        padding: "5px",
+                        backgroundColor: DarkMode ? "#555" : "white",
+                        color: DarkMode ? "white" : "black",
+                      }}
+                    />
+                  </div>
+                )}
                 <button type="submit" className="submit-button">
                   Next <span className="next-icon">→</span>
                 </button>
