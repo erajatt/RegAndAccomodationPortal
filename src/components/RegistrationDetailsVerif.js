@@ -24,6 +24,8 @@ const RegistrationDetailsVerif = ({ formData, isVerified, DarkMode }) => {
     const count = Math.floor(seconds / interval.seconds);
     return `${count} ${interval.label}${count !== 1 ? "s" : ""} ago`;
   }
+
+
   const timeDiff = (text) => {
     // const d1 = Date.now;
     const d2 = new Date(text);
@@ -197,6 +199,24 @@ const RegistrationDetailsVerif = ({ formData, isVerified, DarkMode }) => {
               <td>Form Filled</td>
               <td>{timeDiff(formData.date)}</td>
             </tr>
+          )}
+          {formData.accommodationChoice && (
+            <tr>
+              <td>Accommodation Type</td>
+              <td>{formData.accommodationChoice}</td>
+            </tr>
+          )}
+          {formData.arrivalTime && (
+            <tr>
+            <td>Arrival Date & Time</td>
+            <td>{formData.arrivalTime}</td>
+          </tr>
+          )}
+          {formData.departureTime && (
+            <tr>
+            <td>Departure Date & Time</td>
+            <td>{formData.departureTime}</td>
+          </tr>
           )}
         </table>
       )}
