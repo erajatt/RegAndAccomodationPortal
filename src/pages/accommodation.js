@@ -302,7 +302,7 @@ const Accommodation = (props) => {
                 {other1 && (
                   <div className="form-group">
                     <label className="labelText2" htmlFor="Comment">
-                      Determine your arrival time:
+                      Specify your arrival date and time:
                       <button
                         style={{
                           fontSize: "8px",
@@ -366,7 +366,7 @@ const Accommodation = (props) => {
                 {other2 && (
                   <div className="form-group">
                     <label className="labelText2" htmlFor="Comment">
-                      Determine your departure time:
+                      Specify your departure date and time:
                       <button
                         style={{
                           fontSize: "8px",
