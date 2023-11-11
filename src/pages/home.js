@@ -127,13 +127,13 @@ const Home = (props) => {
         "Thanks for registering! Kindly wait for the organizing committee to verify the payment against your registration, after which you will be able to proceed further."
       );
     } else if (!isStudent) {
-      toast.info("Coming Soon!");
-      // if (isAssigned) {
-      //   navigate("/accommodation");
-      // } else {
-      //   // console.log("clicked");
-      //   setShowAccommodationModal(true);
-      // }
+      // toast.info("Coming Soon!");
+      if (isAssigned) {
+        navigate("/accommodation");
+      } else {
+        // console.log("clicked");
+        setShowAccommodationModal(true);
+      }
     } else {
       navigate("/accommodation");
     }
