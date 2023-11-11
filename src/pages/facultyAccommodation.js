@@ -13,85 +13,86 @@ const Accommodation = (props) => {
   const [step, setStep] = useState(1);
   const [isDeclarationChecked, setIsDeclarationChecked] = useState(false);
   const [accommodationSuccess, setAccommodationSuccess] = useState(false);
-  const [accompanyingPersons, setAccompanyingPersons] = useState("");
-  const [isWaiting, setIsWaiting] = useState(false);
+  //   const [accompanyingPersons, setAccompanyingPersons] = useState("");
+  //   const [isWaiting, setIsWaiting] = useState(false);
   const [isAssigned, setIsAssigned] = useState(false);
-  const [isStudent, setIsStudent] = useState(false);
-  const [accommodationChoice, setAccommodationChoice] = useState("");
+  //   const [isStudent, setIsStudent] = useState(false);
+  const [accommodationChoice, setAccommodationChoice] = useState(null);
+  const [paymentAmount, setPaymentAmount] = useState("1");
   const DarkMode = props.DarkMode;
-  const [other1, setOther1] = useState(false);
-  const [other2, setOther2] = useState(false);
+
   const [formData, setFormData] = useState({
+    arrivalDate: "",
     arrivalTime: "",
+    departureDate: "",
     departureTime: "",
-    accommodationChoice: "",
+    accommodationChoice: null,
     accommodationPaymentReceipt: null,
     accommodationPaymentReferenceNumber: "",
     token: "",
   });
 
   const navigate = useNavigate();
-  useEffect(() => {
-    const setValues = async (token) => {
-      setLoading(true);
-      try {
-        const response = await axios.post(
-          "https://regportal.onrender.com/accommodation/access",
-          { token }
-        );
-        if (response.data.success === "true") {
-          setAccompanyingPersons(response.data.accompanyingPersons);
-          setIsWaiting(response.data.isWaiting);
-          setIsAssigned(response.data.isAssigned);
-          setIsStudent(response.data.isStudent);
-          console.log("first called", response.data);
-          if (isAssigned) {
-            try {
-              const response1 = await axios.post(
-                "https://regportal.onrender.com/accommodation/fetch",
-                { token }
-              );
-              console.log("second called", response1.data.accommodationChoice);
-              if (response1.data.success === "true") {
-                setAccommodationChoice(response1.data.accommodationChoice);
-              }
-            } catch (error) {
-              toast.error(error);
+
+  const setValues = async (token) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://regportal.onrender.com/accommodation/access",
+        { token }
+      );
+      console.log(response.data, "res");
+      if (response.data && response.data.success === "true") {
+        //   setAccompanyingPersons(response.data.accompanyingPersons);
+        //   setIsWaiting(response.data.isWaiting);
+        const updatedIsAssigned = response.data.isAssigned;
+        setIsAssigned(updatedIsAssigned);
+        // console.log(updatedIsAssigned, 'u');
+        //   setIsStudent(response.data.isStudent);
+        // console.log("first called", response.data);
+        // console.log(isAssigned);
+        if (updatedIsAssigned) {
+          // console.log("1");
+          setLoading(true);
+          try {
+            const response1 = await axios.post(
+              "https://regportal.onrender.com/accommodation/fetch",
+              { token }
+            );
+            console.log("second called", response1.data.accommodationChoice);
+            if (response1.data.success === "true") {
+              setAccommodationChoice(response1.data.accommodationChoice);
             }
+          } catch (error) {
+            toast.error(error);
+          } finally {
+            setLoading(false);
           }
         }
-      } catch (error) {
-        toast.error(error);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const initializeFormData = () => {
-      const cookie = document.cookie;
-      const cookieArray = cookie.split("; ");
-      const desiredCookie = cookieArray.find((item) =>
-        item.startsWith("access_token=")
-      );
-      if (desiredCookie) {
-        const cookieValue = desiredCookie.split("=")[1];
-        setValues(cookieValue);
-        setFormData({ ...formData, token: cookieValue });
-      }
-    };
+  const initializeFormData = async () => {
+    const cookie = document.cookie;
+    const cookieArray = cookie.split("; ");
+    const desiredCookie = cookieArray.find((item) =>
+      item.startsWith("access_token=")
+    );
+    if (desiredCookie) {
+      const cookieValue = desiredCookie.split("=")[1];
+      setValues(cookieValue);
+      setFormData({ ...formData, token: cookieValue });
+    }
+  };
 
+  useEffect(() => {
     initializeFormData();
   }, []);
-
-  const handleLogout = () => {
-    window.localStorage.clear();
-    navigate("/");
-    toast.success("Logged out successfully");
-  };
-
-  const handleGoBack = () => {
-    navigate(-1);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -106,38 +107,30 @@ const Accommodation = (props) => {
     setFormData({ ...formData, accommodationPaymentReceipt: file });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStep(2);
-  };
-
-  const calculatePaymentAmount = (accommodationChoice) => {
-    switch (accommodationChoice) {
-      case "SHSPSO":
-        return 2600;
-      case "SHSPDO":
-        return 2000;
-      case "SHDPDO":
-        return 4000;
-      case "SHTPSDO":
-        return 6600;
-      case "Makeshift guest rooms with attached washroom in hostels/quarters - 1000/- per day":
-        return 1000;
-      case "Guest House (Single room) - 1400/- per day":
-        return 1400;
-      case "Guest House (Double room with Double occupancy) - 2000/- per day":
-        return 2000;
-      case "Guest House (Double room with Single occupancy) - 1700/- per day":
-        return 1700;
-      default:
-        return 0;
+  const handleSubmit = async (token) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "https://regportal.onrender.com/accommodation/fee",
+        formData
+      );
+      console.log(formData);
+      if (response.data.success === "true") {
+        setPaymentAmount(response.data.accommodationFees);
+        setStep(2);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong! Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmit2 = async (e) => {
     e.preventDefault();
-    console.log("Submitted");
-    // console.log(formData);
+
     try {
       setLoading(true);
       const response = await axios.post(
@@ -162,21 +155,35 @@ const Accommodation = (props) => {
     }
   };
 
-  const handleSelectChange1 = (event) => {
-    const selectedValue = event.target.value;
-    setOther1(selectedValue === "other");
-    if (selectedValue === "other") {
-      formData.arrivalTime = "";
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 0; hour <= 23; hour++) {
+      const time12Format =
+        (hour % 12 === 0 ? 12 : hour % 12) + (hour < 12 ? " AM" : " PM");
+      options.push(
+        <option key={hour} value={hour}>
+          {time12Format}
+        </option>
+      );
     }
+    return options;
   };
 
-  const handleSelectChange2 = (event) => {
-    const selectedValue = event.target.value;
-    setOther2(selectedValue === "other");
-    if (selectedValue === "other") {
-      formData.departureTime = "";
-    }
-  };
+  //   const handleSelectChange1 = (event) => {
+  //     const selectedValue = event.target.value;
+  //     setOther1(selectedValue === "other");
+  //     if (selectedValue === "other") {
+  //       formData.arrivalTime = "";
+  //     }
+  //   };
+
+  //   const handleSelectChange2 = (event) => {
+  //     const selectedValue = event.target.value;
+  //     setOther2(selectedValue === "other");
+  //     if (selectedValue === "other") {
+  //       formData.departureTime = "";
+  //     }
+  //   };
 
   const Buttons = () => {
     const navigate = useNavigate();
@@ -239,163 +246,117 @@ const Accommodation = (props) => {
                     required
                   >
                     <option value="">Select</option>
-                    {isAssigned === true && (
+                    {isAssigned === true && accommodationChoice && (
                       <option value={accommodationChoice}>
                         {accommodationChoice}
                       </option>
                     )}
-                    {isAssigned === false && accompanyingPersons === "0" && (
-                      <>
-                        <option value="SHSPSO">
-                          Hostel (single occupancy) – 2600
-                        </option>
-                        <option value="SHSPDO">
-                          Hostel (shared rooms with double occupancy) – 2000
-                        </option>
-                      </>
-                    )}
-                    {isAssigned === false && accompanyingPersons === "1" && (
-                      <option value="SHDPDO">
-                        Hostel (shared rooms with double occupancy) – 4000
-                      </option>
-                    )}
-                    {isAssigned === false && accompanyingPersons === "2" && (
-                      <option value="SHTPSDO">
-                        Hostel (shared rooms with double occupancy) – 4000 +
-                        Hostel (single occupancy) – 2600 = 6600
+
+                    {!accommodationChoice && (
+                      <option value="Makeshift">
+                        Makeshift guest rooms with attached washrooms in
+                        hostels/quarters - 1000/- per day, per head
                       </option>
                     )}
                   </select>
                 </div>
 
-                {!other1 && (
-                  <div className="form-group">
-                    <label className="labelText" htmlFor="arrivalTime">
-                      Please choose your arrival date and time.
-                    </label>
-                    <select
-                      id="arrivalTime"
-                      name="arrivalTime"
-                      value={formData.arrivalTime}
-                      onChange={async (e) => {
-                        handleChange(e);
-                        handleSelectChange1(e);
-                      }}
-                      style={
-                        DarkMode
-                          ? { backgroundColor: "#555", color: "white" }
-                          : {}
-                      }
-                      required
-                    >
-                      <option value="">Select</option>
-                      <option value="13th-dec-afternoon/evening">
-                        13th December, Afternoon/Evening
-                      </option>
-                      <option value="14th-dec-morning">
-                        14th December, Morning
-                      </option>
-                      {isStudent && <option value="other">Other</option>}
-                    </select>
-                  </div>
-                )}
-                {other1 && (
-                  <div className="form-group">
-                    <label className="labelText2" htmlFor="Comment">
-                      Specify your arrival date and time:
-                      <button
-                        style={{
-                          fontSize: "8px",
-                          padding: "5px",
-                          marginLeft: "40vh",
-                        }}
-                        onClick={handleSelectChange1}
-                      >
-                        Back
-                      </button>
-                    </label>
-                    <textarea
-                      id="comment"
-                      name="arrivalTime"
-                      value={formData.arrivalTime}
-                      onChange={handleChange}
-                      placeholder="14th December, Morning/Afternoon/Evening"
-                      rows={5}
-                      style={{
-                        width: "100%",
-                        resize: "vertical",
-                        border: "1px solid black", // Add the border style
-                        padding: "5px",
-                        backgroundColor: DarkMode ? "#555" : "white",
-                        color: DarkMode ? "white" : "black",
-                      }}
-                    />
-                  </div>
-                )}
-                {!other2 && (
-                  <div className="form-group">
-                    <label className="labelText" htmlFor="departureTime">
-                      Please choose your departure date and time.
-                    </label>
-                    <select
-                      id="departureTime"
-                      name="departureTime"
-                      value={formData.departureTime}
-                      onChange={async (e) => {
-                        handleChange(e);
-                        handleSelectChange2(e);
-                      }}
-                      style={
-                        DarkMode
-                          ? { backgroundColor: "#555", color: "white" }
-                          : {}
-                      }
-                      required
-                    >
-                      <option value="">Select</option>
-                      <option value="17th-dec-afternoon/evening">
-                        17th December, Afternoon/Evening
-                      </option>
-                      <option value="18th-dec-morning">
-                        18th December, Morning
-                      </option>
-                      {isStudent && <option value="other">Other</option>}
-                    </select>
-                  </div>
-                )}
-                {other2 && (
-                  <div className="form-group">
-                    <label className="labelText2" htmlFor="Comment">
-                      Specify your departure date and time:
-                      <button
-                        style={{
-                          fontSize: "8px",
-                          padding: "5px",
-                          marginLeft: "37vh",
-                        }}
-                        onClick={handleSelectChange2}
-                      >
-                        Back
-                      </button>
-                    </label>
-                    <textarea
-                      id="comment"
-                      placeholder="18th December, Morning/Afternoon/Evening"
-                      name="departureTime"
-                      value={formData.departureTime}
-                      onChange={handleChange}
-                      rows={5}
-                      style={{
-                        width: "100%",
-                        resize: "vertical",
-                        border: "1px solid black", // Add the border style
-                        padding: "5px",
-                        backgroundColor: DarkMode ? "#555" : "white",
-                        color: DarkMode ? "white" : "black",
-                      }}
-                    />
-                  </div>
-                )}
+                <div className="form-group">
+                  <label className="labelText" htmlFor="arrivalDate">
+                    Please choose your arrival date.
+                  </label>
+                  <select
+                    id="arrivalDate"
+                    name="arrivalDate"
+                    value={formData.arrivalDate}
+                    onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
+                    required
+                  >
+                    <option value="">Select</option>
+                    <option value="12 December">12th December</option>
+                    <option value="13 December">13th December</option>
+                    <option value="14 December">14th December</option>
+                    <option value="15 December">15th December</option>
+                    <option value="16 December">16th December</option>
+                    <option value="17 December">17th December</option>
+                    <option value="18 December">18th December</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="labelText" htmlFor="arrivalTime">
+                    Please choose your arrival time.
+                  </label>
+                  <select
+                    id="arrivalTime"
+                    name="arrivalTime"
+                    value={formData.arrivalTime}
+                    onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
+                    required
+                  >
+                    <option value="">Select</option>
+                    {generateTimeOptions()}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="labelText" htmlFor="departureDate">
+                    Please choose your departure date.
+                  </label>
+                  <select
+                    id="departureDate"
+                    name="departureDate"
+                    value={formData.departureDate}
+                    onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
+                    required
+                  >
+                    <option value="">Select</option>
+                    <option value="12 December">12th December</option>
+                    <option value="13 December">13th December</option>
+                    <option value="14 December">14th December</option>
+                    <option value="15 December">15th December</option>
+                    <option value="16 December">16th December</option>
+                    <option value="17 December">17th December</option>
+                    <option value="18 December">18th December</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="labelText" htmlFor="departureTime">
+                    Please choose your departure time.
+                  </label>
+                  <select
+                    id="departureTime"
+                    name="departureTime"
+                    value={formData.departureTime}
+                    onChange={handleChange}
+                    style={
+                      DarkMode
+                        ? { backgroundColor: "#555", color: "white" }
+                        : {}
+                    }
+                    required
+                  >
+                    <option value="">Select</option>
+                    {generateTimeOptions()}
+                  </select>
+                </div>
+
                 <button type="submit" className="submit-button">
                   Next <span className="next-icon">→</span>
                 </button>
@@ -423,11 +384,8 @@ const Accommodation = (props) => {
                   <p>
                     Please visit the following payment link, provide the
                     relevant information, make the payment of{" "}
-                    <strong>
-                      ₹ {calculatePaymentAmount(formData.accommodationChoice)}
-                    </strong>{" "}
-                    and come back here to complete the remaining questions
-                    below.
+                    <strong>₹ {paymentAmount}</strong> and come back here to
+                    complete the remaining questions below.
                     <br />
                     <br />
                     <a

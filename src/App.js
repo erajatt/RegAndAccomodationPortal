@@ -19,10 +19,11 @@ const Auth = lazy(() => import("./pages/auth"));
 const ForgotPass = lazy(() => import("./pages/forgotPass"));
 const Home = lazy(() => import("./pages/home"));
 const Accommodation = lazy(() => import("./pages/accommodation"));
+const FacultyAccommodation = lazy(()=>import ("./pages/facultyAccommodation"))
 const Registration = lazy(() => import("./pages/registration"));
 const Users = lazy(() => import("./pages/users"));
-const AccommodationWaitingList = lazy(() =>
-  import("./pages/accommodationWaitingList")
+const AccommodationList = lazy(() =>
+  import("./pages/accommodationList")
 );
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
 
 function AppContent(props) {
   const location = useLocation();
-  const showButton = location.pathname === "/users"||location.pathname==="/accommodationWaitingList";
+  const showButton = location.pathname === "/users"||location.pathname==="/accommodationList";
   const user = window.localStorage.userID;
   const isDarkMode = props.isDarkMode;
   const setIsDarkMode = props.setIsDarkMode;
@@ -88,10 +89,20 @@ function AppContent(props) {
             }
           />
           <Route
-            path="/accommodationWaitingList"
+            path="/facultyAccommodation"
             element={
               user ? (
-                <AccommodationWaitingList DarkMode={isDarkMode} />
+                <FacultyAccommodation DarkMode={isDarkMode} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route
+            path="/accommodationList"
+            element={
+              user ? (
+                <AccommodationList DarkMode={isDarkMode} />
               ) : (
                 <Navigate to="/" />
               )

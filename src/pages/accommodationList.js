@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import "./accommodationWaitingList.css";
+import "./accommodationList.css";
 
-const AccommodationWaitingList = (props) => {
+const AccommodationList = (props) => {
   const [users, setUsers] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -24,7 +24,7 @@ const AccommodationWaitingList = (props) => {
   const fetchWaitingListData = async (token) => {
     try {
       const response = await axios.post(
-        "https://regportal.onrender.com/accommodation/waiting-list",
+        "https://regportal.onrender.com/accommodation/accommodation-list",
         { token }
       );
       if (response.data.success === "true") {
@@ -62,7 +62,7 @@ const AccommodationWaitingList = (props) => {
 
   const handleaccommodationChoiceChange = async (userID, newValue) => {
     const confirmed = window.confirm(
-      `Are you sure, you want to give ${newValue} to the user? Please note that this action can't be undone.`
+      `Are you sure, you want to give ${newValue} to the user?`
     );
     if (confirmed) {
       try {
@@ -113,21 +113,16 @@ const AccommodationWaitingList = (props) => {
               }
             : {}
         }
-        disabled={user.accommodationChoice != "None" ? true : false}
       >
         <option value="None">Select</option>
-        <option value="Makeshift guest rooms with attached washroom in hostels/quarters - 1000/- per day">
-          Makeshift guest rooms with attached washroom in hostels/quarters -
-          1000/- per day
+        <option value="Guest House (Single room) - 1400/- per day, per head">
+          Guest House (Single room) - 1400/- per day, per head
         </option>
-        <option value="Guest House (Single room) - 1400/- per day">
-          Guest House (Single room) - 1400/- per day
+        <option value="Guest House (Double room with Double occupancy) - 2000/- per day, per head">
+          Guest House (Double room with Double occupancy) - 2000/- per day, per head
         </option>
-        <option value="Guest House (Double room with Double occupancy) - 2000/- per day">
-          Guest House (Double room with Double occupancy) - 2000/- per day
-        </option>
-        <option value="Guest House (Double room with Single occupancy) - 1700/- per day">
-          Guest House (Double room with Single occupancy) - 1700/- per day
+        <option value="Guest House (Double room with Single occupancy) - 1700/- per day, per head">
+          Guest House (Double room with Single occupancy) - 1700/- per day, per head
         </option>
       </select>
     );
@@ -136,7 +131,7 @@ const AccommodationWaitingList = (props) => {
   return (
     isAdmin && (
       <div className={`userscontainer${DarkMode ? "-dark" : ""}`}>
-        <h2>Accommodation Waiting List</h2>
+        <h2>Accommodation List</h2>
         <div className={`user-count${DarkMode ? "-dark" : ""}`}>
           {searchInput==""&&`Total waiting users: ${users.length}`}
           {searchInput!=""&&`Total waiting users: ${filteredUsers.length}`}
@@ -179,4 +174,4 @@ const AccommodationWaitingList = (props) => {
   );
 };
 
-export default AccommodationWaitingList;
+export default AccommodationList;

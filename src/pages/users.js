@@ -187,6 +187,7 @@ const Users = (props) => {
         "https://regportal.onrender.com/admin/download",
         { token: cookieValue }
       );
+      // console.log(response.data);
 
       let allUsersData = response.data.usersData;
       allUsersData.map((data) => {
@@ -257,7 +258,7 @@ const Users = (props) => {
       .then((response) => {
         setLoading(true);
         const formData = response.data.formData;
-
+        console.log(formData);
         const success = response.data.success;
         if (success === "false") {
           toast.warn(response.data.message);
@@ -351,6 +352,25 @@ const Users = (props) => {
            ? `<p><strong>Comment:</strong></p> ${formData?.comment}`
            : ""
        }
+       ${
+         formData?.accommodationChoice
+           ? `<p><strong>Accommodation Choice:</strong></p> ${formData?.accommodationChoice}`
+           : ""
+       }
+      ${
+        formData?.accommodationChoice
+          ? `<p><strong>Arrival Time:</strong></p> ${formData?.arrivalTime}`
+          : ""
+      }${
+            formData?.accommodationChoice
+              ? `<p><strong>Departure Time:</strong></p> ${formData?.departureTime}`
+              : ""
+          }
+      ${
+        formData?.accommodationFees
+          ? `<p><strong>Accommodation Fees:</strong></p> ${formData?.accommodationFees}`
+          : ""
+      }
   <p>For more information, please visit the <a className="link" href="https://ihmtc2023.iitp.ac.in/">official website</a>.</p>
   <p>For inquiries, contact us at <a className="link" href="mailto:ihmtc2023@gmail.com">ihmtc2023@gmail.com</a></p>
   <p className="verification-msg">We are currently verifying your registration details. You will be notified once your submitted data is verified.</p>
