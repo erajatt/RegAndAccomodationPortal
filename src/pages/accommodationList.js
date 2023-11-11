@@ -43,7 +43,6 @@ const AccommodationList = (props) => {
     );
     setFilteredUsers(filtered);
   }, [searchInput]);
-  
 
   useEffect(() => {
     const cookie = document.cookie;
@@ -66,7 +65,7 @@ const AccommodationList = (props) => {
     );
     if (confirmed) {
       try {
-        console.log(userID,cookieValue);
+        console.log(userID, cookieValue);
         const response = await axios.put(
           "https://regportal.onrender.com/accommodation/assign",
           {
@@ -115,14 +114,20 @@ const AccommodationList = (props) => {
         }
       >
         <option value="None">Select</option>
+        <option value="Makeshift">
+          Makeshift guest rooms with attached washrooms in hostels/quarters -
+          1000/- per day, per head
+        </option>
         <option value="Guest House (Single room) - 1400/- per day, per head">
           Guest House (Single room) - 1400/- per day, per head
         </option>
         <option value="Guest House (Double room with Double occupancy) - 2000/- per day, per head">
-          Guest House (Double room with Double occupancy) - 2000/- per day, per head
+          Guest House (Double room with Double occupancy) - 2000/- per day, per
+          head
         </option>
         <option value="Guest House (Double room with Single occupancy) - 1700/- per day, per head">
-          Guest House (Double room with Single occupancy) - 1700/- per day, per head
+          Guest House (Double room with Single occupancy) - 1700/- per day, per
+          head
         </option>
       </select>
     );
@@ -133,8 +138,8 @@ const AccommodationList = (props) => {
       <div className={`userscontainer${DarkMode ? "-dark" : ""}`}>
         <h2>Accommodation List</h2>
         <div className={`user-count${DarkMode ? "-dark" : ""}`}>
-          {searchInput==""&&`Total waiting users: ${users.length}`}
-          {searchInput!=""&&`Total waiting users: ${filteredUsers.length}`}
+          {searchInput == "" && `Total waiting users: ${users.length}`}
+          {searchInput != "" && `Total waiting users: ${filteredUsers.length}`}
         </div>
         <input
           type="text"
