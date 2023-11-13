@@ -113,8 +113,9 @@ const AccommodationList = (props) => {
             : {}
         }
       >
-        <option value="None">Select</option>
-        <option value="Makeshift">
+        <option disabled>Select</option>
+        <option value="Makeshift guest rooms with attached washrooms in hostels/quarters -
+          1000/- per day, per head">
           Makeshift guest rooms with attached washrooms in hostels/quarters -
           1000/- per day, per head
         </option>
