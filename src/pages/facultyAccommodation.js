@@ -32,7 +32,23 @@ const Accommodation = (props) => {
     token: "",
   });
 
+  const [isDepartureVaild, setIsDepartureValid] = useState(false);
   const navigate = useNavigate();
+
+  const validateDeparture = () => {
+    const arrivalDateTime = new Date(
+      `${formData.arrivalDate} ${formData.arrivalTime}`
+    );
+    const departureDateTime = new Date(
+      `${formData.departureDate} ${formData.departureTime}`
+    );
+
+    const isValid = departureDateTime >= arrivalDateTime;
+
+    setIsDepartureValid(isValid);
+
+    return isValid;
+  };
 
   const setValues = async (token) => {
     setLoading(true);
@@ -108,23 +124,27 @@ const Accommodation = (props) => {
   };
 
   const handleSubmit = async (token) => {
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        "https://regportal.onrender.com/accommodation/fee",
-        formData
-      );
-      console.log(formData);
-      if (response.data.success === "true") {
-        setPaymentAmount(response.data.accommodationFees);
-        setStep(2);
-      } else {
-        toast.error(response.data.message);
+    if (!validateDeparture()) {
+      toast.error("Invalid Arrival and Departure Date & Time");
+    } else {
+      try {
+        setLoading(true);
+        const response = await axios.post(
+          "https://regportal.onrender.com/accommodation/fee",
+          formData
+        );
+        console.log(formData);
+        if (response.data.success === "true") {
+          setPaymentAmount(response.data.accommodationFees);
+          setStep(2);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Something went wrong! Please try again.");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      toast.error("Something went wrong! Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -228,7 +248,13 @@ const Accommodation = (props) => {
               <p style={{ color: "red", textAlign: "right" }}>
                 * -&gt; required fields
               </p>
-              <form encType="multipart/form-data" onSubmit={handleSubmit}>
+              <form
+                encType="multipart/form-data"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+              >
                 <div className="form-group">
                   <label className="labelText" htmlFor="accommodationChoice">
                     Please choose your accommodation preference.

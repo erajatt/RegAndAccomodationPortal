@@ -276,6 +276,16 @@ const Home = (props) => {
               >
                 ihmtc2023@gmail.com
               </a>
+            </p>
+            <p>
+              For inquiries related to accomodation, contact us at{" "}
+              <a
+                className="link"
+                href="mailto:ihmtc2023.accommodation@gmail.com"
+                style={{ color: "blue" }}
+              >
+                ihmtc2023.accommodation@gmail.com
+              </a>
               <br />
               <br />
             </p>
