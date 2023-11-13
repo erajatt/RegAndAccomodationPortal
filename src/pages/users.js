@@ -349,26 +349,26 @@ const Users = (props) => {
       <p><strong>Amount Paid:</strong> ₹ ${formData?.fee}.00</p>
        ${
          formData?.comment
-           ? `<p><strong>Comment:</strong></p> ${formData?.comment}`
+           ? `<p><strong>Comment:</strong> ${formData?.comment}</p>`
            : ""
        }
        ${
          formData?.accommodationChoice
-           ? `<p><strong>Accommodation Choice:</strong></p> ${formData?.accommodationChoice}`
+           ? `<p><strong>Accommodation Choice:</strong> ${formData?.accommodationChoice}</p>`
            : ""
        }
       ${
         formData?.accommodationChoice
-          ? `<p><strong>Arrival Time:</strong></p> ${formData?.arrivalTime}`
+          ? `<p><strong>Arrival Time:</strong> ${formData?.arrivalTime}</p>`
           : ""
       }${
             formData?.accommodationChoice
-              ? `<p><strong>Departure Time:</strong></p> ${formData?.departureTime}`
+              ? `<p><strong>Departure Time:</strong> ${formData?.departureTime}</p>`
               : ""
           }
       ${
         formData?.accommodationFees
-          ? `<p><strong>Accommodation Fees:</strong></p> ${formData?.accommodationFees}`
+          ? `<strong>Accommodation Fee Paid:</strong> ₹ ${formData?.accommodationFees}</p>`
           : ""
       }
   <p>For more information, please visit the <a className="link" href="https://ihmtc2023.iitp.ac.in/">official website</a>.</p>
