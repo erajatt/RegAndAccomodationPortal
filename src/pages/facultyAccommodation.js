@@ -36,17 +36,30 @@ const Accommodation = (props) => {
   const navigate = useNavigate();
 
   const validateDeparture = () => {
+    const arDate = `${formData.arrivalDate} 2023`;
+    // console.log(arDate);
+    const arTime = `${formData.arrivalTime}:00:00`;
+    // console.log(arTime);
+
+    const drDate = `${formData.departureDate} 2023`;
+    // console.log(arDate);
+    const drTime = `${formData.departureTime}:00:00`;
+    // console.log(arTime);
+    
+
     const arrivalDateTime = new Date(
-      `${formData.arrivalDate} ${formData.arrivalTime}`
+      `${arDate} ${arTime}`
     );
     const departureDateTime = new Date(
-      `${formData.departureDate} ${formData.departureTime}`
+      `${drDate} ${drTime}`
     );
 
+    // console.log(arrivalDateTime, departureDateTime);
     const isValid = departureDateTime >= arrivalDateTime;
 
     setIsDepartureValid(isValid);
 
+    
     return isValid;
   };
 
